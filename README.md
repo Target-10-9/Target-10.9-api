@@ -1,5 +1,5 @@
 # Target-10.9-api
-🎯 Target-10.9 Target-10.9 est un système de cible connectée pour le tir sportif.
+🎯 Target-10.9 est un système de cible connectée pour le tir sportif. Le projet combine des capteurs physiques, une API, et des interfaces web/mobile pour offrir une expérience interactive en temps réel. Chaque tir est analysé grâce aux vibrations sur la cible, permettant d’afficher le score et la position exacte de l’impact en direct.
 
 ## 🔧Composants du projet
 Target-10.9-api
