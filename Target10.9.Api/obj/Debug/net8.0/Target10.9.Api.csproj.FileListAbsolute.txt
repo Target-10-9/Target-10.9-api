@@ -90,3 +90,4 @@
 /Users/romainavinenc/Documents/Development/Target10.9-api/Target10.9.Api/obj/Debug/net8.0/Target10.9.Api.pdb
 /Users/romainavinenc/Documents/Development/Target10.9-api/Target10.9.Api/obj/Debug/net8.0/Target10.9.Api.genruntimeconfig.cache
 /Users/romainavinenc/Documents/Development/Target10.9-api/Target10.9.Api/obj/Debug/net8.0/ref/Target10.9.Api.dll
+/Users/romainavinenc/Documents/Development/Target10.9-api/Target10.9.Api/bin/Debug/net8.0/Swashbuckle.AspNetCore.Annotations.dll
