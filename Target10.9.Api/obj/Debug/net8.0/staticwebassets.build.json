@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FpCrFKyfl6ht9TeaYFacJAfAdoOvxUOr3v1DINLtT84=",
+  "Source": "Target10.9.Api",
+  "BasePath": "_content/Target10.9.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

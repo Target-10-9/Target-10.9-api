@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "rpsZOhO5xsQ=",
+  "success": true,
+  "projectFilePath": "/Users/romainavinenc/Documents/Development/Target10.9-api/Target10.9.Business/Target10.9.Business.csproj",
+  "expectedPackageFiles": [
+    "/Users/romainavinenc/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/9.0.6/microsoft.extensions.dependencyinjection.abstractions.9.0.6.nupkg.sha512"
+  ],
+  "logs": []
+}
