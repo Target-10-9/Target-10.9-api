@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/Target10.9.Api.props" />
-</Project>

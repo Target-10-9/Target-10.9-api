@@ -1,69 +1,37 @@
 # Build outputs
-bin/
-obj/
+**/bin/
+**/obj/
 
-# Rider / JetBrains
+# IDE & user files
+.vs/
 .idea/
-*.sln.iml
-
-# User-specific files
 *.user
 *.suo
 *.userprefs
-
-# Visual Studio
-.vs/
-
-# NuGet Packages
-*.nupkg
-*.snupkg
-.nuget/
-
-# Logs
 *.log
 
 # OS generated files
 .DS_Store
 Thumbs.db
 
-# Rider cache files
-.idea/
-*.sln.iml
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
 
-# Temporary files
-*.tmp
-*.temp
-
-# Entity Framework migration snapshots
+# EF
 Migrations/**/Snapshot.cs
 
-# Dotnet publish output
+# Publish
 publish/
 
-# Resharper
+# ReSharper
 _ReSharper*/
 *.ReSharper
 
-# Rider
-.idea/
-
-# Generated files
+# Others
 *.g.cs
 *.g.i.cs
-
-# Test result files
-TestResults/
 *.trx
-
-# Others
-*.vspscc
-*.vssscc
-
-# Packages folder
-packages/
-
-# Azure Pipelines
-*.azure-pipelines.yml
-
-# Lock files
-project.lock.json
+TestResults/
+*.sln.iml
