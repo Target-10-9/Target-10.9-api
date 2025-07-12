@@ -1,6 +1,10 @@
 # Build outputs
-bin/
-obj/
+/Target10.9.Api/bin
+/Target10.9.Api/obj
+/Target10.9.Business/bin
+/Target10.9.Business/obj
+/Target10.9.Persistence/bin
+/Target10.9.Persistence/obj
 
 # Rider / JetBrains
 .idea/
@@ -12,7 +16,8 @@ obj/
 *.userprefs
 
 # Visual Studio
-.vs/
+/.vs
+/.vscode
 
 # NuGet Packages
 *.nupkg
