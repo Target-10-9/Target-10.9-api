@@ -1,6 +1,6 @@
 using Target10._9_api.Configuration;
-using Target10._9.Persistance;
 using Target10._9.Business;
+using Target10._9.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
