@@ -1,4 +1,4 @@
-namespace Target10._9.Business.Accounts.Responses;
+namespace Target10._9.Business.Authentications.Responses;
 
 public class LoginResponse
 {

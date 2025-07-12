@@ -1,26 +1,20 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Target10._9.Business.Accounts.Commands;
-using Target10._9.Business.Accounts.Repositories;
-using Target10._9.Business.Accounts.Responses;
+﻿using Target10._9.Business.Authentications.Commands;
+using Target10._9.Business.Authentications.Responses;
 using Target10._9.Business.Providers;
 using Target10._9.Business.Services;
 
-namespace Target10._9.Business.Accounts
+namespace Target10._9.Business.Authentications
 {
-    public interface IAccountsService
+    public interface IAuthenticationsService
     {
         Task<RegisterResponse> RegisterAsync(RegisterCommand command, CancellationToken cancellationToken);
         Task<LoginResponse> LoginAsync(LoginCommand command, CancellationToken cancellationToken);
     }
 
-    public class AccountsService(
-        IUsersRepository usersRepository,
+    public class AuthenticationsService(
         IJwtProvider jwtProvider,
-        IValidationService validationService,
-        IConfiguration configuration,
-        IMapper mapper
-    ) : IAccountsService
+        IValidationService validationService
+    ) : IAuthenticationsService
     {
 
         public async Task<RegisterResponse> RegisterAsync(RegisterCommand command, CancellationToken cancellationToken)

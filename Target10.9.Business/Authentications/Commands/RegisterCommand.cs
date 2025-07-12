@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 
-namespace Target10._9.Business.Accounts.Commands;
+namespace Target10._9.Business.Authentications.Commands;
 
 public class RegisterCommand
 {

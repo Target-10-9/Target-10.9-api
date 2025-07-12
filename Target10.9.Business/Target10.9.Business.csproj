@@ -20,11 +20,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Accounts\" />
-      <Folder Include="Accounts\Enums\" />
-      <Folder Include="Accounts\Exceptions\" />
-      <Folder Include="Accounts\Identities\" />
-      <Folder Include="Accounts\Queries\" />
+      <Folder Include="Authentications\" />
+      <Folder Include="Authentications\Enums\" />
+      <Folder Include="Authentications\Exceptions\" />
+      <Folder Include="Authentications\Identities\" />
+      <Folder Include="Authentications\Queries\" />
+      <Folder Include="Authentications\Repositories\" />
+      <Folder Include="Users\Commands\" />
     </ItemGroup>
 
 </Project>

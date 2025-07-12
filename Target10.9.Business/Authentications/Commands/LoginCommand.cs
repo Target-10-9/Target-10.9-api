@@ -1,7 +1,6 @@
 using FluentValidation;
-using Swashbuckle.AspNetCore.Annotations;
 
-namespace Target10._9.Business.Accounts.Commands;
+namespace Target10._9.Business.Authentications.Commands;
 
 public class LoginCommand
 {
