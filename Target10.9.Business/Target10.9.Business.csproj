@@ -26,7 +26,6 @@
       <Folder Include="Authentications\Identities\" />
       <Folder Include="Authentications\Queries\" />
       <Folder Include="Authentications\Repositories\" />
-      <Folder Include="Users\Commands\" />
     </ItemGroup>
 
 </Project>
