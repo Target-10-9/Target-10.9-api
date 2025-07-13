@@ -30,4 +30,8 @@ public interface IWeaponDetailsRepository
         CancellationToken cancellationToken
     );
     #endregion
+    
+    #region Delete
+    Task DeleteWeaponDetailAsync(Guid id, Guid userId, CancellationToken cancellationToken);
+    #endregion
 }

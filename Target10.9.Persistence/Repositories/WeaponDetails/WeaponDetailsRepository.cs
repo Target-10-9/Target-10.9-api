@@ -78,4 +78,21 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
     }
     
     #endregion
+    
+    #region Delete
+    
+    public async Task DeleteWeaponDetailAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    {
+        var weaponDetail = await dbContext.WeaponDetails
+            .FirstOrDefaultAsync(w => w.Id == id && w.UserId == userId, cancellationToken);
+
+        if (weaponDetail == null)
+            throw new KeyNotFoundException("Weapon detail not found.");
+
+        dbContext.WeaponDetails.Remove(weaponDetail);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    #endregion
 }
