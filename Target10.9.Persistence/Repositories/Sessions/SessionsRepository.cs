@@ -52,4 +52,36 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     }
     
     #endregion
+    
+    #region Put
+    
+    public async Task<Session?> UpdateSessionByIdAsync(
+        Guid sessionId,
+        Guid userId,
+        string name,
+        DateTime dateStart,
+        DateTime dateEnd,
+        Guid sessionModeId,
+        CancellationToken cancellationToken
+    )
+    {
+        var session = await dbContext.Sessions
+            .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
+        
+        if (session == null)
+            return null;
+
+        session.Name = name;
+        session.DateStart = dateStart;
+        session.DateEnd = dateEnd;
+        session.SessionModeId = sessionModeId;
+
+        dbContext.Sessions.Update(session);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return session;
+    }
+    
+    #endregion
 }
