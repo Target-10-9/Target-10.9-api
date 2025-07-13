@@ -61,4 +61,18 @@ public class SessionController(
     }
     
     #endregion
+    
+    #region Delete
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSessionById(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteSessionByIdCommand { Id = id };
+        await sessionsService.DeleteSessionByIdAsync(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    #endregion
 }

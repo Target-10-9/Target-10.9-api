@@ -84,4 +84,21 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     }
     
     #endregion
+    
+    #region Delete
+    
+    public async Task DeleteSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken)
+    {
+        var session = await dbContext.Sessions
+            .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
+        
+        if (session == null)
+            throw new KeyNotFoundException("Session not found.");
+
+        dbContext.Sessions.Remove(session);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    #endregion
 }
