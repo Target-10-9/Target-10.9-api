@@ -1,6 +1,9 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using Target10._9.Business.Services;
 using Target10._9.Business.Users.Commands;
+using Target10._9.Business.Users.Queries;
+using Target10._9.Business.Users.Repositories;
 using Target10._9.Business.Users.Responses;
 
 namespace Target10._9.Business.Users
@@ -9,51 +12,73 @@ namespace Target10._9.Business.Users
     {
         #region Get
 
-        Task<GetUserResponse> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<GetUserResponse> GetUserByIdAsync(GetUserQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         
         #endregion
 
         #region Update
 
-        Task<UpdateUserResponse> UpdateUserAsync(Guid userId, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<UpdateUserResponse> UpdateUserAsync(Guid id, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+
+        #endregion
+
+        #region Delete
+
+        Task DeleteUserAsync(DeleteUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
 
         #endregion
     }
 
     public class UsersService(
-        IValidationService validationService
+        IUsersRepository usersRepository,
+        IValidationService validationService,
+        IMapper mapper
         ) : IUsersService
     {
 
-        public async Task<GetUserResponse> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<GetUserResponse> GetUserByIdAsync(GetUserQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
-            // Pour le test sans BDD, on crée une réponse fictive
-            return new GetUserResponse
-            {
-                Id = userId,
-                Email = "john.doe@gmail.com",
-                FullName = "Test User"
-            };
+            await validationService.ValidateAsync(query, cancellationToken);
+            
+            var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdFromToken == null || query.Id.ToString() != userIdFromToken)
+                throw new UnauthorizedAccessException("You are not allowed to get this user");
+            
+            var user = await usersRepository.GetUserByIdAsync(query.Id, cancellationToken);
+
+            return mapper.Map<GetUserResponse>(user);
         }
         
-        public async Task<UpdateUserResponse> UpdateUserAsync(Guid userId, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<UpdateUserResponse> UpdateUserAsync(Guid id, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(command, cancellationToken);
             
             var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdFromToken == null || userId.ToString() != userIdFromToken)
+            if (userIdFromToken == null || id.ToString() != userIdFromToken)
+                throw new UnauthorizedAccessException("You are not allowed to update this user");
+            
+            var user = await usersRepository.UpdateUserAsync(
+                id,
+                command.Email,
+                command.FirstName,
+                command.LastName,
+                command.LicenseNumber,
+                cancellationToken
+            );
+
+            return mapper.Map<UpdateUserResponse>(user);
+        }
+        
+        public async Task DeleteUserAsync(DeleteUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdFromToken == null || command.Id.ToString() != userIdFromToken)
                 throw new UnauthorizedAccessException("You are not allowed to update this user");
 
-            // Simuler l'utilisateur (à remplacer plus tard par un accès DB)
-            var simulatedUser = new UpdateUserResponse
-            {
-                Id = userId,
-                Email = command.Email,
-                FullName = command.FullName
-            };
-
-            return simulatedUser;
+            await usersRepository.DeleteUserByIdAsync(command.Id, cancellationToken);
         }
     }
 

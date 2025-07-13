@@ -11,6 +11,7 @@
       <PackageReference Include="AutoMapper" Version="12.0.1" />
       <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
       <PackageReference Include="FluentValidation" Version="12.0.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.7" />
@@ -26,6 +27,18 @@
       <Folder Include="Authentications\Identities\" />
       <Folder Include="Authentications\Queries\" />
       <Folder Include="Authentications\Repositories\" />
+      <Folder Include="Logs\Commands\" />
+      <Folder Include="Logs\Responses\" />
+      <Folder Include="ModeDetails\Commands\" />
+      <Folder Include="ModeDetails\Responses\" />
+      <Folder Include="SessionModes\Commands\" />
+      <Folder Include="SessionModes\Responses\" />
+      <Folder Include="SessionModeWeaponDetails\Commands\" />
+      <Folder Include="SessionModeWeaponDetails\Responses\" />
+      <Folder Include="Sessions\Commands\" />
+      <Folder Include="Sessions\Responses\" />
+      <Folder Include="WeaponDetails\Commands\" />
+      <Folder Include="WeaponDetails\Responses\" />
     </ItemGroup>
 
 </Project>

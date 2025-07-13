@@ -1,4 +1,5 @@
 using FluentValidation;
+using Target10._9.Business.Users.Repositories;
 
 namespace Target10._9.Business.Authentications.Commands;
 
@@ -10,13 +11,16 @@ public class LoginCommand
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
-    public LoginCommandValidator()
+    public LoginCommandValidator(IUsersRepository usersRepository)
     {
         RuleFor(x => x.Email)
             .NotEmpty()
             .WithMessage("L'email est requis")
             .EmailAddress()
-            .WithMessage("L'email est invalide");
+            .WithMessage("L'email est invalide")
+            .MustAsync(async (email, cancellationToken) =>
+                await usersRepository.CheckIfEmailExistsAsync(email, cancellationToken))
+            .WithMessage("L'email est introuvable");
 
         RuleFor(x => x.Password)
             .NotEmpty()

@@ -1,7 +1,9 @@
-﻿using Target10._9.Business.Authentications.Commands;
+﻿using AutoMapper;
+using Target10._9.Business.Authentications.Commands;
 using Target10._9.Business.Authentications.Responses;
 using Target10._9.Business.Providers;
 using Target10._9.Business.Services;
+using Target10._9.Business.Users.Repositories;
 
 namespace Target10._9.Business.Authentications
 {
@@ -12,8 +14,10 @@ namespace Target10._9.Business.Authentications
     }
 
     public class AuthenticationsService(
+        IUsersRepository usersRepository,
         IJwtProvider jwtProvider,
-        IValidationService validationService
+        IValidationService validationService,
+        IMapper mapper
     ) : IAuthenticationsService
     {
 
@@ -21,23 +25,17 @@ namespace Target10._9.Business.Authentications
         {
             await validationService.ValidateAsync(command, cancellationToken);
             
-            // if (await usersRepository.CheckIfEmailExistsAsync(command.Email, cancellationToken))
-            // {
-            //     throw new InvalidOperationException("Cet email est déjà utilisé");
-            // }
-            //
-            //  var user = new User
-            // {
-            //     Email = command.Email,
-            //     Password = command.Password,
-            //     FirstName = command.FirstName,
-            //     LastName = command.LastName,
-            //     LicenseNumber = command.LicenseNumber
-            // };
-            //
-            // await usersRepository.AddUserAsync(user, cancellationToken);
-
-            // Pour le test sans BDD, on crée une réponse fictive
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
+            
+            await usersRepository.AddUserAsync(
+                command.Email,
+                hashedPassword,
+                command.FirstName,
+                command.LastName,
+                command.LicenseNumber,
+                cancellationToken
+            );
+            
             return new RegisterResponse
             {
                 Email = command.Email,
@@ -49,16 +47,20 @@ namespace Target10._9.Business.Authentications
         public async Task<LoginResponse> LoginAsync(LoginCommand command, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(command, cancellationToken);
-    
-            var userId = Guid.NewGuid().ToString();
-            var token = jwtProvider.GenerateToken(command.Email, userId);
+            
+            var user = await usersRepository.GetUserByEmailAsync(command.Email, cancellationToken);
+            
+            if (!BCrypt.Net.BCrypt.Verify(command.Password, user.Password))
+            {
+                throw new UnauthorizedAccessException("Email ou mot de passe incorrect");
+            }
+            
+            var token = jwtProvider.GenerateToken(user.Id.ToString(), command.Email);
 
-            return new LoginResponse
-            { 
-                UserId = userId,
-                Email = command.Email,
-                Token = token
-            };
+            var response = mapper.Map<LoginResponse>(user);
+            response.Token = token;
+
+            return response;
         }
     }
 
