@@ -6,6 +6,7 @@ public interface ISessionsRepository
 {
     #region Get
     Task<List<Session>> GetSessionsAsync(Guid userId, CancellationToken cancellationToken);
+    Task<Session?> GetSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken);
     #endregion
     
     #region Post

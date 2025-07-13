@@ -14,10 +14,10 @@ namespace Target10._9.Business.Users.Mappings
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => "Registration successful"));
             CreateMap<User, LoginResponse>();
             
-            CreateMap<User, GetUserResponse>()
+            CreateMap<User, GetUserByIdResponse>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
-            CreateMap<User, UpdateUserResponse>();
+            CreateMap<User, UpdateUserByIdResponse>();
         }
     }
 }

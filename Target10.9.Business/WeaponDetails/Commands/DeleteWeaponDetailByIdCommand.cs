@@ -2,14 +2,14 @@ using FluentValidation;
 
 namespace Target10._9.Business.WeaponDetails.Commands;
 
-public class DeleteWeaponCommand
+public class DeleteWeaponDetailByIdCommand
 {
     public Guid Id { get; set; }
 }
 
-public class DeleteWeaponCommandValidator : AbstractValidator<DeleteWeaponCommand>
+public class DeleteWeaponDetailByIdCommandValidator : AbstractValidator<DeleteWeaponDetailByIdCommand>
 {
-    public DeleteWeaponCommandValidator()
+    public DeleteWeaponDetailByIdCommandValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()

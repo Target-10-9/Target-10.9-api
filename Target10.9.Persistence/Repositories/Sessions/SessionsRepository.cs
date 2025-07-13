@@ -14,6 +14,12 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
             .Where(s => s.UserId == userId)
             .ToListAsync(cancellationToken);
     }
+    
+    public Task<Session?> GetSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Sessions
+            .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
+    }
 
     #endregion
     
