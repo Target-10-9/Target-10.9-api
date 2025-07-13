@@ -1,4 +1,6 @@
 using AutoMapper;
+using Target10._9.Business.Sessions.Entities;
+using Target10._9.Business.Sessions.Responses;
 
 namespace Target10._9.Business.Sessions.Mappings
 {
@@ -6,6 +8,7 @@ namespace Target10._9.Business.Sessions.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<Session, GetSessionsResponse>();
         }
     }
 }
