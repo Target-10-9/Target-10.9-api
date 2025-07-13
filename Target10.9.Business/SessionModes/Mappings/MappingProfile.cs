@@ -1,4 +1,6 @@
 using AutoMapper;
+using Target10._9.Business.SessionModes.Entities;
+using Target10._9.Business.SessionModes.Responses;
 
 namespace Target10._9.Business.SessionModes.Mappings
 {
@@ -6,6 +8,7 @@ namespace Target10._9.Business.SessionModes.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<SessionMode, GetSessionModesResponse>();
         }
     }
 }
