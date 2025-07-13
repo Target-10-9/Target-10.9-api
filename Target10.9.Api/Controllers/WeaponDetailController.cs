@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.WeaponDetails;
 using Target10._9.Business.WeaponDetails.Commands;
@@ -6,7 +7,8 @@ namespace Target10._9_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class WeaponDetailsController(
+[Authorize]
+public class WeaponDetailController(
     IWeaponDetailsService weaponDetailsService
     ) : ControllerBase
 {
@@ -31,6 +33,19 @@ public class WeaponDetailsController(
     public async Task<IActionResult> AddWeaponDetails([FromBody] WeaponDetailCommand command, CancellationToken cancellationToken)
     {
         var result = await weaponDetailsService.AddWeaponDetails(command, User, cancellationToken);
+        return Ok(result);
+    }
+    
+    #endregion
+    
+    #region PUT
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateWeaponDetails(Guid id, [FromBody] UpdateWeaponDetailCommand command, CancellationToken cancellationToken)
+    {
+        var result = await weaponDetailsService.UpdateWeaponDetails(id, command, User, cancellationToken);
         return Ok(result);
     }
     

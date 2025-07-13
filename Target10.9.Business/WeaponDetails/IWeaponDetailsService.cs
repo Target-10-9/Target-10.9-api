@@ -15,6 +15,10 @@ namespace Target10._9.Business.WeaponDetails
         #region POST
         Task<WeaponDetailsResponse> AddWeaponDetails(WeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
+        
+        #region PUT
+        Task<WeaponDetailsResponse> UpdateWeaponDetails(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class WeaponDetailsService(
@@ -48,6 +52,30 @@ namespace Target10._9.Business.WeaponDetails
                 throw new UnauthorizedAccessException("Invalid user identifier.");
 
             var response = await weaponDetailsRepository.AddWeaponDetailAsync(
+                userIdGuid,
+                command.Name,
+                command.Brand,
+                command.Description,
+                command.SerialNumber,
+                cancellationToken
+            );
+            
+            return mapper.Map<WeaponDetailsResponse>(response);
+        }
+        
+        #endregion
+        
+        #region PUT
+        
+        public async Task<WeaponDetailsResponse> UpdateWeaponDetails(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            var response = await weaponDetailsRepository.UpdateWeaponDetailAsync(
+                id,
                 userIdGuid,
                 command.Name,
                 command.Brand,
