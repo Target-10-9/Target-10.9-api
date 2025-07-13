@@ -9,6 +9,7 @@ namespace Target10._9_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController(
     IUsersService usersService
     ) : ControllerBase
@@ -16,7 +17,6 @@ public class UserController(
     #region Get
 
     [HttpGet("{id}")]
-    [Authorize]
     [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -37,7 +37,6 @@ public class UserController(
     #region Update
 
     [HttpPut("{id}")]
-    [Authorize]
     [ProducesResponseType(typeof(UpdateUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -59,7 +58,6 @@ public class UserController(
     #region Delete
 
     [HttpDelete("{id}")]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
