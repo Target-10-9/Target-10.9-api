@@ -9,6 +9,7 @@ namespace Target10._9.Business.WeaponDetails.Mappings
         public MappingProfile()
         {
             CreateMap<WeaponDetail, GetWeaponDetailsResponse>();
+            CreateMap<WeaponDetail, WeaponDetailsResponse>();
         }
     }
 }
