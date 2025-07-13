@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.Sessions;
+using Target10._9.Business.Sessions.Commands;
 
 namespace Target10._9_api.Controllers;
 
@@ -22,5 +23,18 @@ public class SessionController(
         return Ok(sessions);
     }
 
+    #endregion
+    
+    #region Post
+    
+    [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> PostSession([FromBody] AddSessionCommand command, CancellationToken cancellationToken)
+    {
+        var result = await sessionsService.AddSession(command, User, cancellationToken);
+        return Ok(result);
+    }
+    
     #endregion
 }

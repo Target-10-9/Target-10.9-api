@@ -16,4 +16,34 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     }
 
     #endregion
+    
+    #region Post
+    
+    public async Task<Session> AddSessionAsync(
+        Guid userId,
+        string name,
+        DateTime dateStart,
+        DateTime dateEnd,
+        Guid sessionModeId,
+        CancellationToken cancellationToken
+    )
+    {
+        var session = new Session
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            DateStart = dateStart,
+            DateEnd = dateEnd,
+            UserId = userId,
+            SessionModeId = sessionModeId
+        };
+        
+        dbContext.Sessions.Add(session);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return session;
+    }
+    
+    #endregion
 }

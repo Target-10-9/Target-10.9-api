@@ -35,7 +35,6 @@
       <Folder Include="SessionModes\Responses\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
-      <Folder Include="Sessions\Commands\" />
     </ItemGroup>
 
 </Project>

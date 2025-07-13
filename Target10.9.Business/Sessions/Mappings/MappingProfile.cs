@@ -9,6 +9,8 @@ namespace Target10._9.Business.Sessions.Mappings
         public MappingProfile()
         {
             CreateMap<Session, GetSessionsResponse>();
+
+            CreateMap<Session, AddSessionResponse>();
         }
     }
 }
