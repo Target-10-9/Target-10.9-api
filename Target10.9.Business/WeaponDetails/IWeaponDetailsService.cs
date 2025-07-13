@@ -11,18 +11,19 @@ namespace Target10._9.Business.WeaponDetails
     {
         #region Get
         Task<List<GetWeaponDetailsResponse>> GetWeaponDetails(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<GetWeaponDetailResponse> GetWeaponDetailsById(Guid id, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
         #region POST
-        Task<WeaponDetailsResponse> AddWeaponDetails(WeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<AddWeaponDetailResponse> AddWeaponDetail(AddWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
         #region PUT
-        Task<WeaponDetailsResponse> UpdateWeaponDetails(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<UpdateWeaponDetailResponse> UpdateWeaponDetail(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
         #region Delete
-        Task DeleteWeaponDetails(DeleteWeaponCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task DeleteWeaponDetail(DeleteWeaponCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
     }
 
@@ -46,11 +47,26 @@ namespace Target10._9.Business.WeaponDetails
             return mapper.Map<List<GetWeaponDetailsResponse>>(weapons);
         }
         
+        public async Task<GetWeaponDetailResponse> GetWeaponDetailsById(Guid id, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            var weapon = await weaponDetailsRepository.GetWeaponDetailByIdAsync(id, userIdGuid, cancellationToken);
+            
+            if (weapon == null)
+                return null;
+
+            return mapper.Map<GetWeaponDetailResponse>(weapon);
+        }
+        
         #endregion
         
         #region POST
         
-        public async Task<WeaponDetailsResponse> AddWeaponDetails(WeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<AddWeaponDetailResponse> AddWeaponDetail(AddWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(command, cancellationToken);
             
@@ -68,14 +84,14 @@ namespace Target10._9.Business.WeaponDetails
                 cancellationToken
             );
             
-            return mapper.Map<WeaponDetailsResponse>(response);
+            return mapper.Map<AddWeaponDetailResponse>(response);
         }
         
         #endregion
         
         #region PUT
         
-        public async Task<WeaponDetailsResponse> UpdateWeaponDetails(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<UpdateWeaponDetailResponse> UpdateWeaponDetail(Guid id, UpdateWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(command, cancellationToken);
             
@@ -94,14 +110,14 @@ namespace Target10._9.Business.WeaponDetails
                 cancellationToken
             );
             
-            return mapper.Map<WeaponDetailsResponse>(response);
+            return mapper.Map<UpdateWeaponDetailResponse>(response);
         }
         
         #endregion
         
         #region Delete
         
-        public async Task DeleteWeaponDetails(DeleteWeaponCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task DeleteWeaponDetail(DeleteWeaponCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(command, cancellationToken);
             

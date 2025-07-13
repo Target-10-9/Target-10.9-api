@@ -23,6 +23,19 @@ public class WeaponDetailController(
         return Ok(weaponDetails);
     }
     
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetWeaponDetailsById(Guid id, CancellationToken cancellationToken)
+    {
+        var weaponDetail = await weaponDetailsService.GetWeaponDetailsById(id, User, cancellationToken);
+        if (weaponDetail == null)
+        {
+            return NotFound();
+        }
+        return Ok(weaponDetail);
+    }
+    
     #endregion
     
     #region POST
@@ -30,9 +43,9 @@ public class WeaponDetailController(
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AddWeaponDetails([FromBody] WeaponDetailCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddWeaponDetails([FromBody] AddWeaponDetailCommand command, CancellationToken cancellationToken)
     {
-        var result = await weaponDetailsService.AddWeaponDetails(command, User, cancellationToken);
+        var result = await weaponDetailsService.AddWeaponDetail(command, User, cancellationToken);
         return Ok(result);
     }
     
@@ -45,7 +58,7 @@ public class WeaponDetailController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateWeaponDetails(Guid id, [FromBody] UpdateWeaponDetailCommand command, CancellationToken cancellationToken)
     {
-        var result = await weaponDetailsService.UpdateWeaponDetails(id, command, User, cancellationToken);
+        var result = await weaponDetailsService.UpdateWeaponDetail(id, command, User, cancellationToken);
         return Ok(result);
     }
     
@@ -59,7 +72,7 @@ public class WeaponDetailController(
     public async Task<IActionResult> DeleteWeaponDetails(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteWeaponCommand { Id = id };
-        await weaponDetailsService.DeleteWeaponDetails(command, User, cancellationToken);
+        await weaponDetailsService.DeleteWeaponDetail(command, User, cancellationToken);
         return NoContent();
     }
     
