@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Target10._9.Business.Authentications.Commands;
 using Target10._9.Business.Authentications.Responses;
-using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Providers;
 using Target10._9.Business.Services;
 using Target10._9.Business.Users.Repositories;
@@ -17,7 +16,6 @@ namespace Target10._9.Business.Authentications
     public class AuthenticationsService(
         IUsersRepository usersRepository,
         IJwtProvider jwtProvider,
-        ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
     ) : IAuthenticationsService
