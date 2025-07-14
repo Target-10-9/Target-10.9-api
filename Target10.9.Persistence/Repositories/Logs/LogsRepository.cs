@@ -15,5 +15,10 @@ public class LogsRepository(ApplicationDbContext dbContext) : ILogsRepository
             .ToListAsync(cancellationToken);
     }
     
+    public Task<Log> GetLogByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Logs.FirstOrDefaultAsync(log => log.Id == id && log.UserId == userId, cancellationToken);
+    }
+    
     #endregion
 }

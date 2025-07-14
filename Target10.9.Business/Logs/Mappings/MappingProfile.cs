@@ -9,6 +9,7 @@ namespace Target10._9.Business.Logs.Mappings
         public MappingProfile()
         {
             CreateMap<Log, GetLogsResponse>();
+            CreateMap<Log, GetLogResponse>();
         }
     }
 }
