@@ -50,4 +50,18 @@ public class WeaponDetailController(
     }
     
     #endregion
+    
+    #region Delete
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteWeaponDetails(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteWeaponCommand { Id = id };
+        await weaponDetailsService.DeleteWeaponDetails(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    #endregion
 }
