@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.ModeDetails;
+using Target10._9.Business.ModeDetails.Commands;
 using Target10._9.Business.ModeDetails.Queries;
 
 namespace Target10._9_api.Controllers;
@@ -32,6 +33,21 @@ public class ModeDetailController(
         var modeDetail = await modeDetailsService.GetModeDetailByIdAsync(query, User, cancellationToken);
 
         return Ok(modeDetail);
+    }
+    
+    #endregion
+    
+    #region Put
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateModeDetail(Guid id, [FromBody] UpdateModeDetailByIdCommand command, CancellationToken cancellationToken)
+    {
+        var result = await modeDetailsService.UpdateModeDetailByIdAsync(id, command, User, cancellationToken);
+
+        return Ok(result);
     }
     
     #endregion

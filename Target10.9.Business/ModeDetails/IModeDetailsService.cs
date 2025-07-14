@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.ModeDetails.Commands;
 using Target10._9.Business.ModeDetails.Queries;
 using Target10._9.Business.ModeDetails.Repositories;
 using Target10._9.Business.ModeDetails.Responses;
@@ -12,6 +13,10 @@ namespace Target10._9.Business.ModeDetails
         #region Get
         Task<List<GetModeDetailsResponse>> GetModeDetailsAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         Task<GetModeDetailByIdResponse> GetModeDetailByIdAsync(GetModeDetailByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
+        
+        #region Put
+        Task<UpdateModeDetailByIdResponse> UpdateModeDetailByIdAsync(Guid id, UpdateModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
     }
 
@@ -49,6 +54,30 @@ namespace Target10._9.Business.ModeDetails
             return mapper.Map<GetModeDetailByIdResponse>(modeDetail);
         }
 
+        #endregion
+        
+        #region Put
+        
+        public async Task<UpdateModeDetailByIdResponse> UpdateModeDetailByIdAsync(Guid id, UpdateModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            var modeDetail = await modeDetailsRepository.UpdateModeDetailByIdAsync(
+                id,
+                command.ShootLimit,
+                command.ShootingTime,
+                command.RestTime,
+                cancellationToken
+            );
+
+            return mapper.Map<UpdateModeDetailByIdResponse>(modeDetail);
+        }
+        
         #endregion
     }
 
