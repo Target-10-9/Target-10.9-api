@@ -27,10 +27,10 @@ public class WeaponDetailController(
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetWeaponDetailsById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetWeaponDetailById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetWeaponDetailByIdQuery { Id = id };
-        var weaponDetail = await weaponDetailsService.GetWeaponDetailsByIdAsync(query, User, cancellationToken);
+        var weaponDetail = await weaponDetailsService.GetWeaponDetailByIdAsync(query, User, cancellationToken);
         if (weaponDetail == null)
         {
             return NotFound();
@@ -40,7 +40,7 @@ public class WeaponDetailController(
     
     #endregion
     
-    #region POST
+    #region Post
     
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -53,7 +53,7 @@ public class WeaponDetailController(
     
     #endregion
     
-    #region PUT
+    #region Put
     
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

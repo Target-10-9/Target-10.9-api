@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.SessionModes;
 using Target10._9.Business.SessionModes.Commands;
+using Target10._9.Business.SessionModes.Queries;
 
 namespace Target10._9_api.Controllers;
 
@@ -23,9 +24,24 @@ public class SessionModeController(
         return Ok(sessionModes);
     }
     
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSessionModeById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetSessionModeByIdQuery { Id = id };
+        var weaponDetail = await sessionModesService.GetSessionModeByIdAsync(query, User, cancellationToken);
+        if (weaponDetail == null)
+        {
+            return NotFound();
+        }
+        return Ok(weaponDetail);
+    }
+    
+    
     #endregion
     
-    #region POST
+    #region Post
     
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
