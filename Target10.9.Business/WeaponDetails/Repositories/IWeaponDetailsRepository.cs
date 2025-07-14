@@ -6,6 +6,7 @@ public interface IWeaponDetailsRepository
 {
     #region Get
     Task<List<WeaponDetail>> GetWeaponDetailsAsync(Guid userId, CancellationToken cancellationToken);
+    Task<WeaponDetail> GetWeaponDetailByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken);
     #endregion
 
     #region POST

@@ -14,6 +14,12 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
             .Where(w => w.UserId == userId)
             .ToListAsync(cancellationToken);
     }
+    
+    public Task<WeaponDetail> GetWeaponDetailByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.WeaponDetails
+            .FirstOrDefaultAsync(w => w.Id == id && w.UserId == userId, cancellationToken);
+    }
 
     #endregion
     
