@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Target10._9.Business.Services;
-using Target10._9.Business.SessionModes.Entities;
+using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModes.Responses;
 
@@ -12,10 +12,15 @@ namespace Target10._9.Business.SessionModes
         #region Get
         Task<List<GetSessionModesResponse>> GetSessionModesAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
+        
+        #region POST
+        Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class SessionModesService(
         ISessionModesRepository sessionModesRepository,
+        IValidationService validationService,
         IMapper mapper
         ) : ISessionModesService
     {
@@ -33,6 +38,31 @@ namespace Target10._9.Business.SessionModes
             return mapper.Map<List<GetSessionModesResponse>>(sessionModes);
         }
 
+        #endregion
+        
+        #region POST
+        
+        public async Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            var sessionMode = await sessionModesRepository.AddSessionModeAsync(
+                command.Name,
+                command.TimeLimits,
+                command.WarmUp,
+                command.Discipline,
+                command.ModeDetailId,
+                cancellationToken
+            );
+
+            return mapper.Map<AddSessionModeResponse>(sessionMode);
+        }
+        
         #endregion
     }
 

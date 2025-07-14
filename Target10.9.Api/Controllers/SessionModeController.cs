@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.SessionModes;
+using Target10._9.Business.SessionModes.Commands;
 
 namespace Target10._9_api.Controllers;
 
@@ -20,6 +21,19 @@ public class SessionModeController(
     {
         var sessionModes = await sessionModesService.GetSessionModesAsync(User, cancellationToken);
         return Ok(sessionModes);
+    }
+    
+    #endregion
+    
+    #region POST
+    
+    [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddSessionMode([FromBody] AddSessionModeCommand command, CancellationToken cancellationToken)
+    {
+        var result = await sessionModesService.AddSessionModeAsync(command, User, cancellationToken);
+        return Ok(result);
     }
     
     #endregion
