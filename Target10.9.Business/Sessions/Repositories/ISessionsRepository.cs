@@ -19,4 +19,16 @@ public interface ISessionsRepository
         CancellationToken cancellationToken
     );
     #endregion
+    
+    #region Put
+    Task<Session?> UpdateSessionByIdAsync(
+        Guid sessionId,
+        Guid userId,
+        string name,
+        DateTime dateStart,
+        DateTime dateEnd,
+        Guid sessionModeId,
+        CancellationToken cancellationToken
+    );
+    #endregion
 }

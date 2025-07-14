@@ -18,6 +18,10 @@ namespace Target10._9.Business.Sessions
         #region POST
         Task<AddSessionResponse> AddSessionAsync(AddSessionCommand command, ClaimsPrincipal user, CancellationToken cancellationToken);
         #endregion
+        
+        #region PUT
+        Task<UpdateSessionByIdResponse> UpateSessionByIdAsync(Guid id, UpdateSessionByIdCommand command, ClaimsPrincipal user, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class SessionsService(
@@ -80,6 +84,37 @@ namespace Target10._9.Business.Sessions
             );
 
             return mapper.Map<AddSessionResponse>(sessionResponse);
+        }
+        
+        #endregion
+        
+        #region PUT
+        
+        public async Task<UpdateSessionByIdResponse> UpateSessionByIdAsync(Guid id, UpdateSessionByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var session = await sessionsRepository.GetSessionByIdAsync(id, userIdGuid, cancellationToken);
+            
+            if (session == null)
+                throw new KeyNotFoundException("Session not found.");
+
+            await sessionsRepository.UpdateSessionByIdAsync(
+                id,
+                userIdGuid,
+                command.Name,
+                command.DateStart,
+                command.DateEnd,
+                command.SessionModeId,
+                cancellationToken
+            );
+
+            return mapper.Map<UpdateSessionByIdResponse>(session);
         }
         
         #endregion

@@ -12,6 +12,7 @@ namespace Target10._9.Business.Sessions.Mappings
             CreateMap<Session, GetSessionByIdResponse>();
 
             CreateMap<Session, AddSessionResponse>();
+            CreateMap<Session, UpdateSessionByIdResponse>();
         }
     }
 }

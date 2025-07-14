@@ -48,4 +48,17 @@ public class SessionController(
     }
     
     #endregion
+    
+    #region Put
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateSessionById(Guid id, [FromBody] UpdateSessionByIdCommand command, CancellationToken cancellationToken)
+    {
+        var result = await sessionsService.UpateSessionByIdAsync(id, command, User, cancellationToken);
+        return Ok(result);
+    }
+    
+    #endregion
 }
