@@ -9,6 +9,7 @@ namespace Target10._9.Business.ModeDetails.Mappings
         public MappingProfile()
         {
             CreateMap<ModeDetail, GetModeDetailsResponse>();
+            CreateMap<ModeDetail, GetModeDetailByIdResponse>();
         }
     }
 }

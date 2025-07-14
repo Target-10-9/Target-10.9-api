@@ -13,5 +13,10 @@ public class ModeDetailsRepository(ApplicationDbContext dbContext) : IModeDetail
         return dbContext.ModeDetails.ToListAsync(cancellationToken);
     }
     
+    public Task<ModeDetail> GetModeDetailByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return dbContext.ModeDetails.FirstOrDefaultAsync(md => md.Id == id, cancellationToken);
+    }
+    
     #endregion
 }
