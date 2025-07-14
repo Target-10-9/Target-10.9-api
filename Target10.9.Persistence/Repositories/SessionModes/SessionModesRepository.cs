@@ -80,4 +80,20 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
     }
     
     #endregion
+    
+    #region Delete
+    
+    public async Task DeleteSessionModeByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var sessionMode = await GetSessionModeByIdAsync(id, cancellationToken);
+        
+        if (sessionMode == null)
+            throw new KeyNotFoundException("Session mode not found.");
+        
+        dbContext.SessionModes.Remove(sessionMode);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    #endregion
 }

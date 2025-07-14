@@ -63,4 +63,18 @@ public class SessionModeController(
     }
     
     #endregion
+    
+    #region Delete
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSessionMode(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteSessionModeByIdCommand { Id = id };
+        await sessionModesService.DeleteSessionModeByIdAsync(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    #endregion
 }
