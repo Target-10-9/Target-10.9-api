@@ -19,4 +19,31 @@ public class ModeDetailsRepository(ApplicationDbContext dbContext) : IModeDetail
     }
     
     #endregion
+    
+    #region Put
+    
+    public async Task<ModeDetail> UpdateModeDetailByIdAsync(
+        Guid id, 
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
+        CancellationToken cancellationToken
+    )
+    {
+        var modeDetail = await dbContext.ModeDetails.FindAsync(new object[] { id }, cancellationToken);
+        
+        if (modeDetail == null)
+            throw new KeyNotFoundException($"ModeDetail with ID {id} not found.");
+        
+        modeDetail.ShootLimit = shootLimit;
+        modeDetail.ShootingTime = shootingTime;
+        modeDetail.RestTime = restTime;
+
+        dbContext.ModeDetails.Update(modeDetail);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return modeDetail;
+    }
+    
+    #endregion
 }
