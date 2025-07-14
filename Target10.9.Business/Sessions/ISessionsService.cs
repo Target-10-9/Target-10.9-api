@@ -22,6 +22,10 @@ namespace Target10._9.Business.Sessions
         #region PUT
         Task<UpdateSessionByIdResponse> UpateSessionByIdAsync(Guid id, UpdateSessionByIdCommand command, ClaimsPrincipal user, CancellationToken cancellationToken);
         #endregion
+        
+        #region DELETE
+        Task DeleteSessionByIdAsync(DeleteSessionByIdCommand command, ClaimsPrincipal user, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class SessionsService(
@@ -115,6 +119,22 @@ namespace Target10._9.Business.Sessions
             );
 
             return mapper.Map<UpdateSessionByIdResponse>(session);
+        }
+        
+        #endregion
+        
+        #region DELETE
+        
+        public async Task DeleteSessionByIdAsync(DeleteSessionByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            await sessionsRepository.DeleteSessionByIdAsync(command.Id, userIdGuid, cancellationToken);
         }
         
         #endregion
