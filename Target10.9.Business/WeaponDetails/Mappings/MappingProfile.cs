@@ -1,5 +1,6 @@
 using AutoMapper;
-using Target10._9.Business.Users.Entities;
+using Target10._9.Business.WeaponDetails.Entities;
+using Target10._9.Business.WeaponDetails.Responses;
 
 namespace Target10._9.Business.WeaponDetails.Mappings
 {
@@ -7,6 +8,7 @@ namespace Target10._9.Business.WeaponDetails.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<WeaponDetail, GetWeaponDetailsResponse>();
         }
     }
 }

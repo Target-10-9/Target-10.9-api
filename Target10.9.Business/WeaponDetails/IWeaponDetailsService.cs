@@ -1,17 +1,37 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using Target10._9.Business.Services;
 using Target10._9.Business.Users;
+using Target10._9.Business.WeaponDetails.Repositories;
+using Target10._9.Business.WeaponDetails.Responses;
 
 namespace Target10._9.Business.WeaponDetails
 {
     public interface IWeaponDetailsService
     {
+        Task<List<GetWeaponDetailsResponse>> GetWeaponDetails(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
     }
 
     public class WeaponDetailsService(
-        IValidationService validationService
+        IWeaponDetailsRepository weaponDetailsRepository,
+        IMapper mapper
         ) : IWeaponDetailsService
     {
+        #region Get
+        
+        public async Task<List<GetWeaponDetailsResponse>> GetWeaponDetails(ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var weapons = await weaponDetailsRepository.GetWeaponDetailsAsync(userIdGuid, cancellationToken);
+
+            return mapper.Map<List<GetWeaponDetailsResponse>>(weapons);
+        }
+        
+        #endregion
     }
 
     // --------- LOG ----------

@@ -38,7 +38,6 @@
       <Folder Include="Sessions\Commands\" />
       <Folder Include="Sessions\Responses\" />
       <Folder Include="WeaponDetails\Commands\" />
-      <Folder Include="WeaponDetails\Responses\" />
     </ItemGroup>
 
 </Project>
