@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.WeaponDetails;
+using Target10._9.Business.WeaponDetails.Commands;
 
 namespace Target10._9_api.Controllers;
 
@@ -18,6 +19,19 @@ public class WeaponDetailsController(
     {
         var weaponDetails = await weaponDetailsService.GetWeaponDetails(User, cancellationToken);
         return Ok(weaponDetails);
+    }
+    
+    #endregion
+    
+    #region POST
+    
+    [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddWeaponDetails([FromBody] WeaponDetailCommand command, CancellationToken cancellationToken)
+    {
+        var result = await weaponDetailsService.AddWeaponDetails(command, User, cancellationToken);
+        return Ok(result);
     }
     
     #endregion

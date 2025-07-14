@@ -9,4 +9,17 @@ public interface IWeaponDetailsRepository
     Task<List<WeaponDetail>> GetWeaponDetailsAsync(Guid userId, CancellationToken cancellationToken);
     
     #endregion
+
+    #region POST
+
+    Task<WeaponDetail> AddWeaponDetailAsync(
+        Guid userId,
+        string name,
+        string brand,
+        string description,
+        string serialNumber,
+        CancellationToken cancellationToken
+    );
+
+    #endregion
 }
