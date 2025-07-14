@@ -12,19 +12,19 @@ namespace Target10._9.Business.Users
     {
         #region Get
 
-        Task<GetUserResponse> GetUserByIdAsync(GetUserQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<GetUserByIdResponse> GetUserByIdAsync(GetUserByIdQuery byIdQuery, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         
         #endregion
 
         #region Update
 
-        Task<UpdateUserResponse> UpdateUserAsync(Guid id, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<UpdateUserByIdResponse> UpdateUserAsync(Guid id, UpdateUserByIdCommand byIdCommand, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
 
         #endregion
 
         #region Delete
 
-        Task DeleteUserAsync(DeleteUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task DeleteUserAsync(DeleteUserByIdCommand byIdCommand, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
 
         #endregion
     }
@@ -36,7 +36,7 @@ namespace Target10._9.Business.Users
         ) : IUsersService
     {
 
-        public async Task<GetUserResponse> GetUserByIdAsync(GetUserQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<GetUserByIdResponse> GetUserByIdAsync(GetUserByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(query, cancellationToken);
             
@@ -47,12 +47,12 @@ namespace Target10._9.Business.Users
             
             var user = await usersRepository.GetUserByIdAsync(query.Id, cancellationToken);
 
-            return mapper.Map<GetUserResponse>(user);
+            return mapper.Map<GetUserByIdResponse>(user);
         }
         
-        public async Task<UpdateUserResponse> UpdateUserAsync(Guid id, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<UpdateUserByIdResponse> UpdateUserAsync(Guid id, UpdateUserByIdCommand byIdCommand, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
-            await validationService.ValidateAsync(command, cancellationToken);
+            await validationService.ValidateAsync(byIdCommand, cancellationToken);
             
             var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -61,24 +61,24 @@ namespace Target10._9.Business.Users
             
             var user = await usersRepository.UpdateUserAsync(
                 id,
-                command.Email,
-                command.FirstName,
-                command.LastName,
-                command.LicenseNumber,
+                byIdCommand.Email,
+                byIdCommand.FirstName,
+                byIdCommand.LastName,
+                byIdCommand.LicenseNumber,
                 cancellationToken
             );
 
-            return mapper.Map<UpdateUserResponse>(user);
+            return mapper.Map<UpdateUserByIdResponse>(user);
         }
         
-        public async Task DeleteUserAsync(DeleteUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task DeleteUserAsync(DeleteUserByIdCommand byIdCommand, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userIdFromToken == null || command.Id.ToString() != userIdFromToken)
+            if (userIdFromToken == null || byIdCommand.Id.ToString() != userIdFromToken)
                 throw new UnauthorizedAccessException("You are not allowed to update this user");
 
-            await usersRepository.DeleteUserByIdAsync(command.Id, cancellationToken);
+            await usersRepository.DeleteUserByIdAsync(byIdCommand.Id, cancellationToken);
         }
     }
 

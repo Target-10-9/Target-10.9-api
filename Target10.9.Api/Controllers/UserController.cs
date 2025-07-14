@@ -17,13 +17,13 @@ public class UserController(
     #region Get
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GetUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetUserByIdResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
-        var query = new GetUserQuery { Id = id };
+        var query = new GetUserByIdQuery { Id = id };
         
         var user = await usersService.GetUserByIdAsync(query, User, cancellationToken);
         if (user == null)
@@ -37,14 +37,14 @@ public class UserController(
     #region Update
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(UpdateUserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UpdateUserByIdResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserByIdCommand byIdCommand, CancellationToken cancellationToken)
     {
         try
         {
-            var response = await usersService.UpdateUserAsync(id, command, User, cancellationToken);
+            var response = await usersService.UpdateUserAsync(id, byIdCommand, User, cancellationToken);
             return Ok(response);
         }
         catch (UnauthorizedAccessException)
@@ -66,7 +66,7 @@ public class UserController(
     {
         try
         {
-            var command = new DeleteUserCommand { Id = id };
+            var command = new DeleteUserByIdCommand { Id = id };
             await usersService.DeleteUserAsync(command, User, cancellationToken);
             return NoContent();
         }

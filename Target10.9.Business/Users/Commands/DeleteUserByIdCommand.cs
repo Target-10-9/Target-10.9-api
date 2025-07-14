@@ -2,14 +2,14 @@ using FluentValidation;
 
 namespace Target10._9.Business.Users.Commands;
 
-public class DeleteUserCommand
+public class DeleteUserByIdCommand
 {
     public Guid Id { get; set; }
 }
 
-public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
+public class DeleteUserByIdCommandValidator : AbstractValidator<DeleteUserByIdCommand>
 {
-    public DeleteUserCommandValidator()
+    public DeleteUserByIdCommandValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()

@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Target10._9.Business.WeaponDetails.Commands;
 
-public class UpdateWeaponDetailCommand
+public class UpdateWeaponDetailByIdCommand
 {
     public string Name { get; set; } = null!;
     public string Brand { get; set; } = null!;
@@ -10,9 +10,9 @@ public class UpdateWeaponDetailCommand
     public string SerialNumber { get; set; } = null!;
 }
 
-public class UpdateWeaponDetailCommandValidator : AbstractValidator<UpdateWeaponDetailCommand>
+public class UpdateWeaponDetailByIdCommandValidator : AbstractValidator<UpdateWeaponDetailByIdCommand>
 {
-    public UpdateWeaponDetailCommandValidator()
+    public UpdateWeaponDetailByIdCommandValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

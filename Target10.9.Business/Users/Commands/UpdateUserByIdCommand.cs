@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Target10._9.Business.Users.Commands;
 
-public class UpdateUserCommand
+public class UpdateUserByIdCommand
 {
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
@@ -10,9 +10,9 @@ public class UpdateUserCommand
     public string LicenseNumber { get; set; } = null!;
 }
 
-public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+public class UpdateUserByIdCommandValidator : AbstractValidator<UpdateUserByIdCommand>
 {
-    public UpdateUserCommandValidator()
+    public UpdateUserByIdCommandValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()

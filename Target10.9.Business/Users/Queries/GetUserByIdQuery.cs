@@ -2,14 +2,14 @@ using FluentValidation;
 
 namespace Target10._9.Business.Users.Queries;
 
-public class GetUserQuery
+public class GetUserByIdQuery
 {
     public Guid Id { get; set; }
 }
 
-public class GetUserQueryValidator : AbstractValidator<GetUserQuery>
+public class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
 {
-    public GetUserQueryValidator()
+    public GetUserByIdQueryValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()

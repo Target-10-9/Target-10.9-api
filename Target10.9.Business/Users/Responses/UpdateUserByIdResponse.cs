@@ -1,6 +1,6 @@
 namespace Target10._9.Business.Users.Responses;
 
-public class UpdateUserResponse
+public class UpdateUserByIdResponse
 {
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
