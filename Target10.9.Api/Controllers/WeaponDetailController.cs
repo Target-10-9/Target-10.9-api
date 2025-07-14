@@ -31,10 +31,7 @@ public class WeaponDetailController(
     {
         var query = new GetWeaponDetailByIdQuery { Id = id };
         var weaponDetail = await weaponDetailsService.GetWeaponDetailByIdAsync(query, User, cancellationToken);
-        if (weaponDetail == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(weaponDetail);
     }
     

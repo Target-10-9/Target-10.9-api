@@ -19,4 +19,16 @@ public interface ISessionModesRepository
         CancellationToken cancellationToken
     );
     #endregion
+    
+    #region Put
+    Task<SessionMode> UpdateSessionModeAsync(
+        Guid id,
+        string name,
+        TimeOnly timeLimits,
+        TimeOnly warmUp,
+        string discipline,
+        Guid modeDetailId,
+        CancellationToken cancellationToken
+    );
+    #endregion
 }
