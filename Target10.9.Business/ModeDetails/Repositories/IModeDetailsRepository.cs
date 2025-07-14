@@ -27,4 +27,8 @@ public interface IModeDetailsRepository
         CancellationToken cancellationToken
     );
     #endregion
+    
+    #region Delete
+    Task DeleteModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
+    #endregion
 }
