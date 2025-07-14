@@ -12,6 +12,7 @@ namespace Target10._9.Business.SessionModes.Mappings
             CreateMap<SessionMode, GetSessionModeByIdResponse>();
             
             CreateMap<SessionMode, AddSessionModeResponse>();
+            CreateMap<SessionMode, UpdateSessionModeByIdResponse>();
         }
     }
 }

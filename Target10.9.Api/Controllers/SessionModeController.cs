@@ -31,10 +31,7 @@ public class SessionModeController(
     {
         var query = new GetSessionModeByIdQuery { Id = id };
         var weaponDetail = await sessionModesService.GetSessionModeByIdAsync(query, User, cancellationToken);
-        if (weaponDetail == null)
-        {
-            return NotFound();
-        }
+
         return Ok(weaponDetail);
     }
     
@@ -49,6 +46,19 @@ public class SessionModeController(
     public async Task<IActionResult> AddSessionMode([FromBody] AddSessionModeCommand command, CancellationToken cancellationToken)
     {
         var result = await sessionModesService.AddSessionModeAsync(command, User, cancellationToken);
+        return Ok(result);
+    }
+    
+    #endregion
+    
+    #region Put
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateSessionMode(Guid id, [FromBody] UpdateSessionModeByIdCommand command, CancellationToken cancellationToken)
+    {
+        var result = await sessionModesService.UpdateSessionModeByIdAsync(id, command, User, cancellationToken);
         return Ok(result);
     }
     

@@ -48,4 +48,36 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
     }
     
     #endregion
+    
+    #region Put
+    
+    public async Task<SessionMode> UpdateSessionModeAsync(
+        Guid id,
+        string name,
+        TimeOnly timeLimits,
+        TimeOnly warmUp,
+        string discipline,
+        Guid modeDetailId,
+        CancellationToken cancellationToken
+    )
+    {
+        var sessionMode = await GetSessionModeByIdAsync(id, cancellationToken);
+        
+        if (sessionMode == null)
+            throw new KeyNotFoundException("Session mode not found.");
+        
+        sessionMode.Name = name;
+        sessionMode.TimeLimits = timeLimits;
+        sessionMode.WarmUp = warmUp;
+        sessionMode.Discipline = discipline;
+        sessionMode.ModeDetailId = modeDetailId;
+        
+        dbContext.SessionModes.Update(sessionMode);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return sessionMode;
+    }
+    
+    #endregion
 }

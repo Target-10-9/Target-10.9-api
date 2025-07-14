@@ -18,6 +18,10 @@ namespace Target10._9.Business.SessionModes
         #region Post
         Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
+        
+        #region Put
+        Task<UpdateSessionModeByIdResponse> UpdateSessionModeByIdAsync(Guid id, UpdateSessionModeByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class SessionModesService(
@@ -77,6 +81,32 @@ namespace Target10._9.Business.SessionModes
             );
 
             return mapper.Map<AddSessionModeResponse>(sessionMode);
+        }
+        
+        #endregion
+        
+        #region Put
+        
+        public async Task<UpdateSessionModeByIdResponse> UpdateSessionModeByIdAsync(Guid id, UpdateSessionModeByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var response = await sessionModesRepository.UpdateSessionModeAsync(
+                id,
+                command.Name,
+                command.TimeLimits,
+                command.WarmUp,
+                command.Discipline,
+                command.ModeDetailId,
+                cancellationToken
+            );
+
+            return mapper.Map<UpdateSessionModeByIdResponse>(response);
         }
         
         #endregion
