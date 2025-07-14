@@ -32,7 +32,6 @@
       <Folder Include="ModeDetails\Commands\" />
       <Folder Include="ModeDetails\Responses\" />
       <Folder Include="SessionModes\Commands\" />
-      <Folder Include="SessionModes\Responses\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>
