@@ -1,15 +1,37 @@
-﻿using Target10._9.Business.Services;
+﻿using System.Security.Claims;
+using AutoMapper;
+using Target10._9.Business.ModeDetails.Repositories;
+using Target10._9.Business.ModeDetails.Responses;
 
 namespace Target10._9.Business.ModeDetails
 {
     public interface IModeDetailsService
     {
+        #region Get
+        Task<List<GetModeDetailsResponse>> GetModeDetailsAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class ModeDetailsService(
-        IValidationService validationService
+        IModeDetailsRepository modeDetailsRepository,
+        IMapper mapper
         ) : IModeDetailsService
     {
+        #region Get
+        
+        public async Task<List<GetModeDetailsResponse>> GetModeDetailsAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var sessionModes = await modeDetailsRepository.GetModeDetailsAsync(cancellationToken);
+
+            return mapper.Map<List<GetModeDetailsResponse>>(sessionModes);
+        }
+
+        #endregion
     }
 
     // --------- LOG ----------

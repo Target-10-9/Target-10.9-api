@@ -1,4 +1,6 @@
 using AutoMapper;
+using Target10._9.Business.ModeDetails.Entities;
+using Target10._9.Business.ModeDetails.Responses;
 
 namespace Target10._9.Business.ModeDetails.Mappings
 {
@@ -6,6 +8,7 @@ namespace Target10._9.Business.ModeDetails.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<ModeDetail, GetModeDetailsResponse>();
         }
     }
 }

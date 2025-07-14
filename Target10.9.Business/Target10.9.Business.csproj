@@ -30,7 +30,6 @@
       <Folder Include="Logs\Commands\" />
       <Folder Include="Logs\Responses\" />
       <Folder Include="ModeDetails\Commands\" />
-      <Folder Include="ModeDetails\Responses\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>
