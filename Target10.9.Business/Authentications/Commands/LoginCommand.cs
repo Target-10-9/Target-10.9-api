@@ -15,17 +15,17 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
         RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage("L'email est requis")
+            .WithMessage("Email is required")
             .EmailAddress()
-            .WithMessage("L'email est invalide")
+            .WithMessage("Email is invalid")
             .MustAsync(async (email, cancellationToken) =>
                 await usersRepository.CheckIfEmailExistsAsync(email, cancellationToken))
-            .WithMessage("L'email est introuvable");
+            .WithMessage("Email not found");
 
         RuleFor(x => x.Password)
             .NotEmpty()
-            .WithMessage("Le mot de passe est requis")
+            .WithMessage("Password is required")
             .MinimumLength(6)
-            .WithMessage("Le mot de passe doit contenir au moins 6 caractères");
+            .WithMessage("Password must contain at least 6 characters");
     }
 }

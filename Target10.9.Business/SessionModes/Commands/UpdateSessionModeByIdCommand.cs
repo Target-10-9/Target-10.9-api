@@ -17,22 +17,22 @@ public class UpdateSessionModeByIdCommandValidator : AbstractValidator<UpdateSes
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage("Le nom est requis");
+            .WithMessage("Name is required");
         
         RuleFor(x => x.TimeLimits)
             .NotEmpty()
-            .WithMessage("La limite de temps est requise");
+            .WithMessage("Time limit is required");
         
         RuleFor(x => x.WarmUp)
             .NotEmpty()
-            .WithMessage("Le warm up est requis");
+            .WithMessage("Warm-up is required");
         
         RuleFor(x => x.Discipline)
             .NotEmpty()
-            .WithMessage("La discipline est requise");
+            .WithMessage("Discipline is required");
         
         RuleFor(x => x.ModeDetailId)
             .NotEmpty()
-            .WithMessage("Le détail du mode est requis");
+            .WithMessage("Mode detail is required");
     }
 }

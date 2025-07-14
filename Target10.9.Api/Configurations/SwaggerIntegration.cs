@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace Target10._9_api.Configuration;
+namespace Target10._9_api.Configurations;
 
 public static class SwaggerIntegration
 {
@@ -9,7 +9,7 @@ public static class SwaggerIntegration
         var bearerScheme = new OpenApiSecurityScheme
         {
             Name = "Authorization",
-            Description = "Entrez 'Bearer' [espace] et ensuite votre token JWT.",
+            Description = "Enter 'Bearer' [space] and then your JWT token.",
             In = ParameterLocation.Header,
             Type = SecuritySchemeType.Http,
             Scheme = "Bearer",
@@ -30,9 +30,9 @@ public static class SwaggerIntegration
         {
             c.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Mon API",
+                Title = "My API",
                 Version = "v1",
-                Description = "API d'exemple pour démonstration"
+                Description = "Sample API for demonstration"
             });
 
             c.AddSecurityDefinition("Bearer", bearerScheme);

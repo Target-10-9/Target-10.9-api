@@ -26,8 +26,4 @@
       <ProjectReference Include="..\Target10.9.Persistence\Target10.9.Persistence.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
 </Project>

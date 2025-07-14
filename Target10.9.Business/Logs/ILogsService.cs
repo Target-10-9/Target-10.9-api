@@ -11,7 +11,7 @@ namespace Target10._9.Business.Logs
     {
         #region Get
         Task<List<GetLogsResponse>> GetLogsAsync(ClaimsPrincipal user, CancellationToken cancellationToken);
-        Task<GetLogResponse> GetLogByIdAsync(GetLogByIdQuery query, ClaimsPrincipal user, CancellationToken cancellationToken);
+        Task<GetLogByIdResponse> GetLogByIdAsync(GetLogByIdQuery query, ClaimsPrincipal user, CancellationToken cancellationToken);
         #endregion
     }
 
@@ -35,7 +35,7 @@ namespace Target10._9.Business.Logs
             return mapper.Map<List<GetLogsResponse>>(logs);
         }
         
-        public async Task<GetLogResponse> GetLogByIdAsync(GetLogByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<GetLogByIdResponse> GetLogByIdAsync(GetLogByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(query, cancellationToken);
             
@@ -46,21 +46,9 @@ namespace Target10._9.Business.Logs
             
             var log = await logsRepository.GetLogByIdAsync(query.Id, userIdGuid, cancellationToken);
             
-            return mapper.Map<GetLogResponse>(log);
+            return mapper.Map<GetLogByIdResponse>(log);
         }
         
         #endregion
     }
-
-    // --------- LOG ----------
-    // internal static partial class AccountServiceLoggerExtension
-    // {
-    //     private const int EventIdOffset = 1000;
-    //
-    //     [LoggerMessage(
-    //         EventId = EventIdOffset + 0,
-    //         Level = LogLevel.Information,
-    //         Message = "Connexion de l'utilisateur {user}.")]
-    //     public static partial void UserLogin(this ILogger logger, string user);
-    // }
 }

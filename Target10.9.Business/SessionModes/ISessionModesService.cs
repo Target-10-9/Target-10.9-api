@@ -42,7 +42,7 @@ namespace Target10._9.Business.SessionModes
         {
             var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
-            if (!Guid.TryParse(userId, out var userIdGuid))
+            if (!Guid.TryParse(userId, out _))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             var sessionModes = await sessionModesRepository.GetSessionModesAsync(cancellationToken);
@@ -56,7 +56,7 @@ namespace Target10._9.Business.SessionModes
             
             var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
-            if (!Guid.TryParse(userId, out var userIdGuid))
+            if (!Guid.TryParse(userId, out _))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             var sessionMode = await sessionModesRepository.GetSessionModeByIdAsync(query.Id, cancellationToken);

@@ -40,7 +40,7 @@ namespace Target10._9.Business.Authentications
             {
                 Email = command.Email,
                 FullName = command.FirstName + " " + command.LastName,
-                Message = "Utilisateur inscrit avec succès"
+                Message = "User successfully registered"
             };
         }
 
@@ -52,7 +52,7 @@ namespace Target10._9.Business.Authentications
             
             if (!BCrypt.Net.BCrypt.Verify(command.Password, user.Password))
             {
-                throw new UnauthorizedAccessException("Email ou mot de passe incorrect");
+                throw new UnauthorizedAccessException("Incorrect email or password");
             }
             
             var token = jwtProvider.GenerateToken(user.Id.ToString(), command.Email);

@@ -109,7 +109,7 @@ namespace Target10._9.Business.WeaponDetails
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
 
-            var response = await weaponDetailsRepository.UpdateWeaponDetailAsync(
+            var response = await weaponDetailsRepository.UpdateWeaponDetailByIdAsync(
                 id,
                 userIdGuid,
                 command.Name,

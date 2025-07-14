@@ -6,7 +6,7 @@ public interface IModeDetailsRepository
 {
     #region Get
     Task<List<ModeDetail>> GetModeDetailsAsync(CancellationToken cancellationToken);
-    Task<ModeDetail> GetModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<ModeDetail?> GetModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
     #endregion
     
     #region Post
@@ -21,9 +21,9 @@ public interface IModeDetailsRepository
     #region Put
     Task<ModeDetail> UpdateModeDetailByIdAsync(
         Guid id, 
-        int ShootLimit,
-        TimeOnly ShootingTime,
-        TimeOnly RestTime,
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
         CancellationToken cancellationToken
     );
     #endregion

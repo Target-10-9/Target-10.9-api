@@ -15,7 +15,7 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
             .ToListAsync(cancellationToken);
     }
     
-    public Task<WeaponDetail> GetWeaponDetailByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    public Task<WeaponDetail?> GetWeaponDetailByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return dbContext.WeaponDetails
             .FirstOrDefaultAsync(w => w.Id == id && w.UserId == userId, cancellationToken);
@@ -55,7 +55,7 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
     
     #region Put
     
-    public async Task<WeaponDetail> UpdateWeaponDetailAsync(
+    public async Task<WeaponDetail> UpdateWeaponDetailByIdAsync(
         Guid id,
         Guid userId,
         string name,

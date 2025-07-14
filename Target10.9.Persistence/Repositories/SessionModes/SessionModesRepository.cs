@@ -13,7 +13,7 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         return dbContext.SessionModes.ToListAsync(cancellationToken);
     }
     
-    public Task<SessionMode> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken)
+    public Task<SessionMode?> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return dbContext.SessionModes.FirstOrDefaultAsync(sm => sm.Id == id, cancellationToken);
     }

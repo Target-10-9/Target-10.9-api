@@ -24,11 +24,7 @@ public class UserController(
     public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery { Id = id };
-        
         var user = await usersService.GetUserByIdAsync(query, User, cancellationToken);
-        if (user == null)
-            return NotFound();
-
         return Ok(user);
     }
 

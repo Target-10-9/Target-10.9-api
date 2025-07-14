@@ -13,6 +13,6 @@ public class GetLogByIdQueryValidator : AbstractValidator<GetLogByIdQuery>
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("L'id est requis.");
+            .WithMessage("l'Id is required.");
     }
 }

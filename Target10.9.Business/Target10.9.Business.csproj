@@ -22,12 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Authentications\" />
-      <Folder Include="Authentications\Enums\" />
-      <Folder Include="Authentications\Exceptions\" />
-      <Folder Include="Authentications\Identities\" />
-      <Folder Include="Authentications\Queries\" />
-      <Folder Include="Authentications\Repositories\" />
-      <Folder Include="Logs\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>
