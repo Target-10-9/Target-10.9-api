@@ -2,8 +2,14 @@ using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Target10._9.Business.Authentications;
+using Target10._9.Business.Logs;
+using Target10._9.Business.ModeDetails;
 using Target10._9.Business.Services;
+using Target10._9.Business.SessionModes;
+using Target10._9.Business.SessionModeWeaponDetails;
+using Target10._9.Business.Sessions;
 using Target10._9.Business.Users;
+using Target10._9.Business.WeaponDetails;
 
 namespace Target10._9.Business;
 
@@ -16,6 +22,12 @@ public static class DependencyInjection
         return services
             .AddAuthenticationsDependencies()
             .AddUsersDependencies()
+            .AddWeaponDetailsDependencies()
+            .AddLogsDependencies()
+            .AddSessionsDependencies()
+            .AddSessionModesDependencies()
+            .AddModeDetailsDependencies()
+            .AddSessionModeWeaponDetailsDependencies()
             .AddScoped<IValidationService, ValidationService>()
             .AddValidatorsFromAssembly(businessAssembly);
     }

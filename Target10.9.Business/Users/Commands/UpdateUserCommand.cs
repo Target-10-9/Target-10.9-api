@@ -5,7 +5,9 @@ namespace Target10._9.Business.Users.Commands;
 public class UpdateUserCommand
 {
     public string Email { get; set; } = null!;
-    public string FullName { get; set; } = null!;
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string LicenseNumber { get; set; } = null!;
 }
 
 public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
@@ -18,8 +20,16 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
             .EmailAddress()
             .WithMessage("L'email est invalide");
 
-        RuleFor(x => x.FullName)
+        RuleFor(x => x.FirstName)
             .NotEmpty()
             .WithMessage("Le prénom est requis");
+        
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .WithMessage("Le nom est requis");
+        
+        RuleFor(x => x.LicenseNumber)
+            .NotEmpty()
+            .WithMessage("Le numéro de license est requis");
     }
 }

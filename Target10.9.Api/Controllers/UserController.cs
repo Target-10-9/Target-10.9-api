@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.Users;
 using Target10._9.Business.Users.Commands;
+using Target10._9.Business.Users.Queries;
 using Target10._9.Business.Users.Responses;
 
 namespace Target10._9_api.Controllers;
@@ -20,9 +21,11 @@ public class UserController(
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUser(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
-        var user = await usersService.GetUserByIdAsync(id, cancellationToken);
+        var query = new GetUserQuery { Id = id };
+        
+        var user = await usersService.GetUserByIdAsync(query, User, cancellationToken);
         if (user == null)
             return NotFound();
 
@@ -38,16 +41,40 @@ public class UserController(
     [ProducesResponseType(typeof(UpdateUserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
-            var response = await usersService.UpdateUserAsync(id, request, User, cancellationToken);
+            var response = await usersService.UpdateUserAsync(id, command, User, cancellationToken);
             return Ok(response);
         }
         catch (UnauthorizedAccessException)
         {
             return Forbid();
+        }
+    }
+
+    #endregion
+
+    #region Delete
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var command = new DeleteUserCommand { Id = id };
+            await usersService.DeleteUserAsync(command, User, cancellationToken);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
         }
     }
 

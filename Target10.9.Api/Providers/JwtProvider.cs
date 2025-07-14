@@ -10,12 +10,12 @@ public class JwtProvider(
         IConfiguration configuration
 ) : IJwtProvider
 {
-        public string GenerateToken(string email, string userId)
+        public string GenerateToken(string userId, string email)
         { 
                 var claims = new[]
                 {
-                        new Claim(ClaimTypes.Email, email),
-                        new Claim(ClaimTypes.NameIdentifier, userId)
+                        new Claim(ClaimTypes.NameIdentifier, userId),
+                        new Claim(ClaimTypes.Email, email)
                 };
                                 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));

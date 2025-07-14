@@ -20,11 +20,11 @@ namespace Target10._9_api.Controllers
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> Register([FromBody] RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
         {
             try
             {
-                var result = await authenticationsService.RegisterAsync(request, cancellationToken);
+                var result = await authenticationsService.RegisterAsync(command, cancellationToken);
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
@@ -41,11 +41,11 @@ namespace Target10._9_api.Controllers
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody] LoginCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
         {
             try
             {
-                var response = await authenticationsService.LoginAsync(request, cancellationToken);
+                var response = await authenticationsService.LoginAsync(command, cancellationToken);
                 return Ok(response);
             }
             catch (UnauthorizedAccessException)
