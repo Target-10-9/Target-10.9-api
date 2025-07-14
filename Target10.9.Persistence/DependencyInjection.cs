@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Target10._9.Business.Accounts.Repositories;
+using Target10._9.Business.Users.Repositories;
 using Target10._9.Persistencence.Repositories;
 
 namespace Target10._9.Persistence;

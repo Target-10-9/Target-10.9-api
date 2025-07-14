@@ -1,8 +1,9 @@
 using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Target10._9.Business.Accounts;
+using Target10._9.Business.Authentications;
 using Target10._9.Business.Services;
+using Target10._9.Business.Users;
 
 namespace Target10._9.Business;
 
@@ -13,7 +14,8 @@ public static class DependencyInjection
         var businessAssembly = typeof(DependencyInjection).GetTypeInfo().Assembly;
 
         return services
-            .AddAccountsDependencies()
+            .AddAuthenticationsDependencies()
+            .AddUsersDependencies()
             .AddScoped<IValidationService, ValidationService>()
             .AddValidatorsFromAssembly(businessAssembly);
     }

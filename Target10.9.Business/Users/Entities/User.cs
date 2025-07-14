@@ -1,4 +1,4 @@
-namespace Target10._9.Business.Accounts.Entities;
+namespace Target10._9.Business.Users.Entities;
 
 public class User
 {

@@ -1,6 +1,15 @@
 # Build outputs
+<<<<<<< HEAD
+/Target10.9.Api/bin
+/Target10.9.Api/obj
+/Target10.9.Business/bin
+/Target10.9.Business/obj
+/Target10.9.Persistence/bin
+/Target10.9.Persistence/obj
+=======
 **/bin/
 **/obj/
+>>>>>>> develop
 
 # IDE & user files
 .vs/
@@ -8,6 +17,20 @@
 *.user
 *.suo
 *.userprefs
+<<<<<<< HEAD
+
+# Visual Studio
+/.vs
+/.vscode
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# Logs
+=======
+>>>>>>> develop
 *.log
 
 # OS generated files

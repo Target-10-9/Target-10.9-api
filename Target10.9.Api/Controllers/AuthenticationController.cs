@@ -1,16 +1,14 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using Target10._9.Business.Accounts;
-using Target10._9.Business.Accounts.Commands;
-using Target10._9.Business.Accounts.Responses;
+using Target10._9.Business.Authentications;
+using Target10._9.Business.Authentications.Commands;
+using Target10._9.Business.Authentications.Responses;
 
 namespace Target10._9_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController(
-        IAccountsService accountsService
+    public class AuthenticationController(
+        IAuthenticationsService authenticationsService
     ) : ControllerBase
     {
         /// <summary>
@@ -26,7 +24,7 @@ namespace Target10._9_api.Controllers
         {
             try
             {
-                var result = await accountsService.RegisterAsync(request, cancellationToken);
+                var result = await authenticationsService.RegisterAsync(request, cancellationToken);
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
@@ -47,7 +45,7 @@ namespace Target10._9_api.Controllers
         {
             try
             {
-                var response = await accountsService.LoginAsync(request, cancellationToken);
+                var response = await authenticationsService.LoginAsync(request, cancellationToken);
                 return Ok(response);
             }
             catch (UnauthorizedAccessException)
