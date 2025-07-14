@@ -30,9 +30,9 @@ public class SessionModeController(
     public async Task<IActionResult> GetSessionModeById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetSessionModeByIdQuery { Id = id };
-        var weaponDetail = await sessionModesService.GetSessionModeByIdAsync(query, User, cancellationToken);
+        var sessionMode = await sessionModesService.GetSessionModeByIdAsync(query, User, cancellationToken);
 
-        return Ok(weaponDetail);
+        return Ok(sessionMode);
     }
     
     

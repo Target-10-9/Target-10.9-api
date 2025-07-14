@@ -6,5 +6,6 @@ public interface IModeDetailsRepository
 {
     #region Get
     Task<List<ModeDetail>> GetModeDetailsAsync(CancellationToken cancellationToken);
+    Task<ModeDetail> GetModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
     #endregion
 }
