@@ -1,16 +1,31 @@
-﻿using Target10._9.Business.Users.Responses;
+﻿using System.Security.Claims;
+using Target10._9.Business.Services;
+using Target10._9.Business.Users.Commands;
+using Target10._9.Business.Users.Responses;
 
 namespace Target10._9.Business.Users
 {
     public interface IUsersService
     {
-        Task<GetUserResponse> GetUserByIdAsync(Guid userId);
+        #region Get
+
+        Task<GetUserResponse> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
+        
+        #endregion
+
+        #region Update
+
+        Task<UpdateUserResponse> UpdateUserAsync(Guid userId, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+
+        #endregion
     }
 
-    public class UsersService() : IUsersService
+    public class UsersService(
+        IValidationService validationService
+        ) : IUsersService
     {
 
-        public async Task<GetUserResponse> GetUserByIdAsync(Guid userId)
+        public async Task<GetUserResponse> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             // Pour le test sans BDD, on crée une réponse fictive
             return new GetUserResponse
@@ -19,6 +34,26 @@ namespace Target10._9.Business.Users
                 Email = "john.doe@gmail.com",
                 FullName = "Test User"
             };
+        }
+        
+        public async Task<UpdateUserResponse> UpdateUserAsync(Guid userId, UpdateUserCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userIdFromToken = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdFromToken == null || userId.ToString() != userIdFromToken)
+                throw new UnauthorizedAccessException("You are not allowed to update this user");
+
+            // Simuler l'utilisateur (à remplacer plus tard par un accès DB)
+            var simulatedUser = new UpdateUserResponse
+            {
+                Id = userId,
+                Email = command.Email,
+                FullName = command.FullName
+            };
+
+            return simulatedUser;
         }
     }
 
