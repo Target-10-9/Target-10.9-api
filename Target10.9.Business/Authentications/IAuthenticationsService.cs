@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Target10._9.Business.Authentications.Commands;
 using Target10._9.Business.Authentications.Responses;
+using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Providers;
 using Target10._9.Business.Services;
 using Target10._9.Business.Users.Repositories;
@@ -16,6 +17,7 @@ namespace Target10._9.Business.Authentications
     public class AuthenticationsService(
         IUsersRepository usersRepository,
         IJwtProvider jwtProvider,
+        ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
     ) : IAuthenticationsService
@@ -63,16 +65,4 @@ namespace Target10._9.Business.Authentications
             return response;
         }
     }
-
-    // --------- LOG ----------
-    // internal static partial class AccountServiceLoggerExtension
-    // {
-    //     private const int EventIdOffset = 1000;
-    //
-    //     [LoggerMessage(
-    //         EventId = EventIdOffset + 0,
-    //         Level = LogLevel.Information,
-    //         Message = "Connexion de l'utilisateur {user}.")]
-    //     public static partial void UserLogin(this ILogger logger, string user);
-    // }
 }

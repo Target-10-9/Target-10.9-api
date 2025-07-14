@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Services;
 using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
@@ -30,6 +31,7 @@ namespace Target10._9.Business.SessionModes
 
     public class SessionModesService(
         ISessionModesRepository sessionModesRepository,
+        ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
         ) : ISessionModesService
@@ -83,6 +85,13 @@ namespace Target10._9.Business.SessionModes
                 command.ModeDetailId,
                 cancellationToken
             );
+            
+            await logsRepository.AddLogAsync(
+                "AddSessionMode",
+                $"Added session mode with ID: {sessionMode.Id}",
+                userIdGuid,
+                cancellationToken
+            );
 
             return mapper.Map<AddSessionModeResponse>(sessionMode);
         }
@@ -109,6 +118,13 @@ namespace Target10._9.Business.SessionModes
                 command.ModeDetailId,
                 cancellationToken
             );
+            
+            await logsRepository.AddLogAsync(
+                "UpdateSessionMode",
+                $"Updated session mode with ID: {id}",
+                userIdGuid,
+                cancellationToken
+            );
 
             return mapper.Map<UpdateSessionModeByIdResponse>(response);
         }
@@ -127,20 +143,15 @@ namespace Target10._9.Business.SessionModes
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             await sessionModesRepository.DeleteSessionModeByIdAsync(command.Id, cancellationToken);
+            
+            await logsRepository.AddLogAsync(
+                "DeleteSessionMode",
+                $"Deleted session mode with ID: {command.Id}",
+                userIdGuid,
+                cancellationToken
+            );
         }
         
         #endregion
     }
-
-    // --------- LOG ----------
-    // internal static partial class AccountServiceLoggerExtension
-    // {
-    //     private const int EventIdOffset = 1000;
-    //
-    //     [LoggerMessage(
-    //         EventId = EventIdOffset + 0,
-    //         Level = LogLevel.Information,
-    //         Message = "Connexion de l'utilisateur {user}.")]
-    //     public static partial void UserLogin(this ILogger logger, string user);
-    // }
 }

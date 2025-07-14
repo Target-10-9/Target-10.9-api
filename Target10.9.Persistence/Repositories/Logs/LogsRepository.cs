@@ -21,4 +21,30 @@ public class LogsRepository(ApplicationDbContext dbContext) : ILogsRepository
     }
     
     #endregion
+    
+    #region Post
+    
+    public async Task<Log> AddLogAsync(
+        string action,
+        string details,
+        Guid userId,
+        CancellationToken cancellationToken
+    )
+    {
+        var log = new Log
+        {
+            Id = Guid.NewGuid(),
+            Action = action,
+            Details = details,
+            DateLog = DateTime.UtcNow,
+            UserId = userId
+        };
+        
+        dbContext.Logs.Add(log);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return log;
+    }
+    
+    #endregion
 }
