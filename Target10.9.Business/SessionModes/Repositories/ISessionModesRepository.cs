@@ -7,4 +7,15 @@ public interface ISessionModesRepository
     #region Get
     Task<List<SessionMode>> GetSessionModesAsync(Guid userId, CancellationToken cancellationToken);
     #endregion
+    
+    #region POST
+    Task<SessionMode> AddSessionModeAsync(
+        string name,
+        TimeOnly timeLimits,
+        TimeOnly warmUp,
+        string discipline,
+        Guid modeDetailId,
+        CancellationToken cancellationToken
+    );
+    #endregion
 }

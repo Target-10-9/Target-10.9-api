@@ -17,4 +17,33 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
     }
     
     #endregion
+    
+    #region POST
+    
+    public async Task<SessionMode> AddSessionModeAsync(
+        string name,
+        TimeOnly timeLimits,
+        TimeOnly warmUp,
+        string discipline,
+        Guid modeDetailId,
+        CancellationToken cancellationToken
+    )
+    {
+        var sessionMode = new SessionMode
+        {
+            Name = name,
+            TimeLimits = timeLimits,
+            WarmUp = warmUp,
+            Discipline = discipline,
+            ModeDetailId = modeDetailId
+        };
+        
+        dbContext.SessionModes.Add(sessionMode);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return sessionMode;
+    }
+    
+    #endregion
 }
