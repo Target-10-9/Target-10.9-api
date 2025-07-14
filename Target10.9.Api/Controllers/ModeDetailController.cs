@@ -42,7 +42,7 @@ public class ModeDetailController(
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AddModeDetailMode([FromBody] AddModeDetailCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddModeDetail([FromBody] AddModeDetailCommand command, CancellationToken cancellationToken)
     {
         var result = await modeDetailsService.AddModeDetailAsync(command, User, cancellationToken);
         return Ok(result);
