@@ -28,7 +28,6 @@
       <Folder Include="Authentications\Queries\" />
       <Folder Include="Authentications\Repositories\" />
       <Folder Include="Logs\Commands\" />
-      <Folder Include="ModeDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>

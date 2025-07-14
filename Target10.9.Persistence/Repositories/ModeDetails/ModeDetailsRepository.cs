@@ -19,4 +19,70 @@ public class ModeDetailsRepository(ApplicationDbContext dbContext) : IModeDetail
     }
     
     #endregion
+    
+    #region Post
+    
+    public async Task<ModeDetail> AddModeDetailAsync(
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
+        CancellationToken cancellationToken
+    )
+    {
+        var modeDetail = new ModeDetail
+        {
+            ShootLimit = shootLimit,
+            ShootingTime = shootingTime,
+            RestTime = restTime
+        };
+
+        await dbContext.ModeDetails.AddAsync(modeDetail, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return modeDetail;
+    }
+    
+    #endregion
+    
+    #region Put
+    
+    public async Task<ModeDetail> UpdateModeDetailByIdAsync(
+        Guid id, 
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
+        CancellationToken cancellationToken
+    )
+    {
+        var modeDetail = await dbContext.ModeDetails.FindAsync(new object[] { id }, cancellationToken);
+        
+        if (modeDetail == null)
+            throw new KeyNotFoundException($"ModeDetail with ID {id} not found.");
+        
+        modeDetail.ShootLimit = shootLimit;
+        modeDetail.ShootingTime = shootingTime;
+        modeDetail.RestTime = restTime;
+
+        dbContext.ModeDetails.Update(modeDetail);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return modeDetail;
+    }
+    
+    #endregion
+    
+    #region Delete
+    
+    public async Task DeleteModeDetailByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var modeDetail = await dbContext.ModeDetails.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        
+        if (modeDetail == null)
+            throw new KeyNotFoundException($"ModeDetail with ID {id} not found.");
+        
+        dbContext.ModeDetails.Remove(modeDetail);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    #endregion
 }

@@ -10,6 +10,9 @@ namespace Target10._9.Business.ModeDetails.Mappings
         {
             CreateMap<ModeDetail, GetModeDetailsResponse>();
             CreateMap<ModeDetail, GetModeDetailByIdResponse>();
+
+            CreateMap<ModeDetail, AddModeDetailResponse>();
+            CreateMap<ModeDetail, UpdateModeDetailByIdResponse>();
         }
     }
 }

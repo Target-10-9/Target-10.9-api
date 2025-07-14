@@ -8,4 +8,27 @@ public interface IModeDetailsRepository
     Task<List<ModeDetail>> GetModeDetailsAsync(CancellationToken cancellationToken);
     Task<ModeDetail> GetModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
     #endregion
+    
+    #region Post
+    Task<ModeDetail> AddModeDetailAsync(
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
+        CancellationToken cancellationToken
+    );
+    #endregion
+    
+    #region Put
+    Task<ModeDetail> UpdateModeDetailByIdAsync(
+        Guid id, 
+        int ShootLimit,
+        TimeOnly ShootingTime,
+        TimeOnly RestTime,
+        CancellationToken cancellationToken
+    );
+    #endregion
+    
+    #region Delete
+    Task DeleteModeDetailByIdAsync(Guid id, CancellationToken cancellationToken);
+    #endregion
 }
