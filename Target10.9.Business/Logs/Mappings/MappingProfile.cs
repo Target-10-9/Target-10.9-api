@@ -1,4 +1,6 @@
 using AutoMapper;
+using Target10._9.Business.Logs.Entities;
+using Target10._9.Business.Logs.Responses;
 
 namespace Target10._9.Business.Logs.Mappings
 {
@@ -6,6 +8,7 @@ namespace Target10._9.Business.Logs.Mappings
     {
         public MappingProfile()
         {
+            CreateMap<Log, GetLogsResponse>();
         }
     }
 }
