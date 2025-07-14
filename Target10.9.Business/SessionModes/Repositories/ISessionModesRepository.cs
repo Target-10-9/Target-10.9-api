@@ -31,4 +31,8 @@ public interface ISessionModesRepository
         CancellationToken cancellationToken
     );
     #endregion
+    
+    #region Delete
+    Task DeleteSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
+    #endregion
 }
