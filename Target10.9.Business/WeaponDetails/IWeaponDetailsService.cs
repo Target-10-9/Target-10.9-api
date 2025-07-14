@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Services;
 using Target10._9.Business.WeaponDetails.Commands;
 using Target10._9.Business.WeaponDetails.Queries;
@@ -30,6 +31,7 @@ namespace Target10._9.Business.WeaponDetails
 
     public class WeaponDetailsService(
         IWeaponDetailsRepository weaponDetailsRepository,
+        ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
         ) : IWeaponDetailsService
@@ -58,9 +60,6 @@ namespace Target10._9.Business.WeaponDetails
                 throw new UnauthorizedAccessException("Invalid user identifier.");
 
             var weapon = await weaponDetailsRepository.GetWeaponDetailByIdAsync(query.Id, userIdGuid, cancellationToken);
-            
-            if (weapon == null)
-                return null;
 
             return mapper.Map<GetWeaponDetailByIdResponse>(weapon);
         }
@@ -84,6 +83,13 @@ namespace Target10._9.Business.WeaponDetails
                 command.Brand,
                 command.Description,
                 command.SerialNumber,
+                cancellationToken
+            );
+            
+            await logsRepository.AddLogAsync(
+                "AddWeaponDetail",
+                $"Weapon detail with ID {response.Id} added by user {userIdGuid}.",
+                userIdGuid,
                 cancellationToken
             );
             
@@ -113,6 +119,13 @@ namespace Target10._9.Business.WeaponDetails
                 cancellationToken
             );
             
+            await logsRepository.AddLogAsync(
+                "UpdateWeaponDetail",
+                $"Weapon detail with ID {id} updated by user {userIdGuid}.",
+                userIdGuid,
+                cancellationToken
+            );
+            
             return mapper.Map<UpdateWeaponDetailByIdResponse>(response);
         }
         
@@ -130,20 +143,15 @@ namespace Target10._9.Business.WeaponDetails
                 throw new UnauthorizedAccessException("Invalid user identifier.");
 
             await weaponDetailsRepository.DeleteWeaponDetailAsync(command.Id, userIdGuid, cancellationToken);
+            
+            await logsRepository.AddLogAsync(
+                "DeleteWeaponDetail",
+                $"Weapon detail with ID {command.Id} deleted by user {userIdGuid}.",
+                userIdGuid,
+                cancellationToken
+            );
         }
         
         #endregion
     }
-
-    // --------- LOG ----------
-    // internal static partial class AccountServiceLoggerExtension
-    // {
-    //     private const int EventIdOffset = 1000;
-    //
-    //     [LoggerMessage(
-    //         EventId = EventIdOffset + 0,
-    //         Level = LogLevel.Information,
-    //         Message = "Connexion de l'utilisateur {user}.")]
-    //     public static partial void UserLogin(this ILogger logger, string user);
-    // }
 }

@@ -8,4 +8,13 @@ public interface ILogsRepository
     Task<List<Log>> GetLogsAsync(Guid userId, CancellationToken cancellationToken);
     Task<Log> GetLogByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken);
     #endregion
+    
+    #region Post
+    Task<Log> AddLogAsync(
+        string action,
+        string details,
+        Guid userId,
+        CancellationToken cancellationToken
+    );
+    #endregion
 }
