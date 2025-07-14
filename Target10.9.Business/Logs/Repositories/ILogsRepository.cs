@@ -6,7 +6,7 @@ public interface ILogsRepository
 {
     #region Get
     Task<List<Log>> GetLogsAsync(Guid userId, CancellationToken cancellationToken);
-    Task<Log> GetLogByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<Log?> GetLogByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken);
     #endregion
     
     #region Post

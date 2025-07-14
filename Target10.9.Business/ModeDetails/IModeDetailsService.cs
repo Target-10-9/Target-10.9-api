@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.ModeDetails.Commands;
 using Target10._9.Business.ModeDetails.Queries;
 using Target10._9.Business.ModeDetails.Repositories;
@@ -30,6 +31,7 @@ namespace Target10._9.Business.ModeDetails
 
     public class ModeDetailsService(
         IModeDetailsRepository modeDetailsRepository,
+        ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
         ) : IModeDetailsService
@@ -40,7 +42,7 @@ namespace Target10._9.Business.ModeDetails
         {
             var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
-            if (!Guid.TryParse(userId, out var userIdGuid))
+            if (!Guid.TryParse(userId, out _))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             var modeDetails = await modeDetailsRepository.GetModeDetailsAsync(cancellationToken);
@@ -54,7 +56,7 @@ namespace Target10._9.Business.ModeDetails
             
             var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
-            if (!Guid.TryParse(userId, out var userIdGuid))
+            if (!Guid.TryParse(userId, out _))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             var modeDetail = await modeDetailsRepository.GetModeDetailByIdAsync(query.Id, cancellationToken);
@@ -81,6 +83,13 @@ namespace Target10._9.Business.ModeDetails
                 command.RestTime,
                 cancellationToken
             );
+            
+            await logsRepository.AddLogAsync(
+                "ModeDetailAdded",
+                $"Mode detail added with ID: {modeDetail.Id}",
+                userIdGuid,
+                cancellationToken
+            );
 
             return mapper.Map<AddModeDetailResponse>(modeDetail);
         }
@@ -105,6 +114,13 @@ namespace Target10._9.Business.ModeDetails
                 command.RestTime,
                 cancellationToken
             );
+            
+            await logsRepository.AddLogAsync(
+                "ModeDetailUpdated",
+                $"Mode detail with ID: {id} updated",
+                userIdGuid,
+                cancellationToken
+            );
 
             return mapper.Map<UpdateModeDetailByIdResponse>(modeDetail);
         }
@@ -123,6 +139,13 @@ namespace Target10._9.Business.ModeDetails
                 throw new UnauthorizedAccessException("Invalid user identifier.");
 
             await modeDetailsRepository.DeleteModeDetailByIdAsync(command.Id, cancellationToken);
+            
+            await logsRepository.AddLogAsync(
+                "ModeDetailDeleted",
+                $"Mode detail with ID: {command.Id} deleted",
+                userIdGuid,
+                cancellationToken
+            );
         }
         
         #endregion

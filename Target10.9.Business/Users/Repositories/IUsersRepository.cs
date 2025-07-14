@@ -20,11 +20,11 @@ public interface IUsersRepository
     #region Add
     
     Task<User> AddUserAsync(
-        string Email,
-        string Password,
-        string FirstName,
-        string LastName,
-        string LicenseNumber,
+        string email,
+        string password,
+        string firstName,
+        string lastName,
+        string licenseNumber,
         CancellationToken cancellationToken
     );
     

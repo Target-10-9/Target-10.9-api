@@ -13,6 +13,6 @@ public class GetModeDetailByIdQueryValidator : AbstractValidator<GetModeDetailBy
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("Le détail de l'arme ne peux pas être vide.");
+            .WithMessage("Weapon detail cannot be empty.");
     }
 }

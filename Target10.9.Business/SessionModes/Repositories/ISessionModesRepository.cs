@@ -6,7 +6,7 @@ public interface ISessionModesRepository
 {
     #region Get
     Task<List<SessionMode>> GetSessionModesAsync(CancellationToken cancellationToken);
-    Task<SessionMode> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<SessionMode?> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
     #endregion
     
     #region Post

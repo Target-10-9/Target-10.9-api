@@ -18,29 +18,29 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
         RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage("L'email est requis")
+            .WithMessage("Email is required")
             .EmailAddress()
-            .WithMessage("L'email est invalide")
+            .WithMessage("Email is invalid")
             .MustAsync(async (email, cancellationToken) =>
                 !await usersRepository.CheckIfEmailExistsAsync(email, cancellationToken))
-            .WithMessage("L'email est déjà utilisé");
+            .WithMessage("Email not found");
 
         RuleFor(x => x.Password)
             .NotEmpty()
-            .WithMessage("Le mot de passe est requis")
+            .WithMessage("Password is required")
             .MinimumLength(6)
-            .WithMessage("Le mot de passe doit contenir au moins 6 caractères");
+            .WithMessage("Password must contain at least 6 characters");
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .WithMessage("Le prénom est requis");
+            .WithMessage("First name is required");
 
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .WithMessage("Le nom est requis");
+            .WithMessage("Name is required");
 
         RuleFor(x => x.LicenseNumber)
             .NotEmpty()
-            .WithMessage("Le numéro de licence est requis");
+            .WithMessage("License number is required");
     }
 }

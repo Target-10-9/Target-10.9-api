@@ -13,6 +13,6 @@ public class DeleteModeDetailByIdCommandValidator : AbstractValidator<DeleteMode
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("L'Id est requis");
+            .WithMessage("ID is required");
     }
 }

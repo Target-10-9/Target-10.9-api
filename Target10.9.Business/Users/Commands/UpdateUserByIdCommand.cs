@@ -16,20 +16,20 @@ public class UpdateUserByIdCommandValidator : AbstractValidator<UpdateUserByIdCo
     {
         RuleFor(x => x.Email)
             .NotEmpty()
-            .WithMessage("L'email est requis")
+            .WithMessage("Email est requis")
             .EmailAddress()
-            .WithMessage("L'email est invalide");
+            .WithMessage("Invalid email format");
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .WithMessage("Le prénom est requis");
+            .WithMessage("First name is required");
         
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .WithMessage("Le nom est requis");
+            .WithMessage("Last name is required");
         
         RuleFor(x => x.LicenseNumber)
             .NotEmpty()
-            .WithMessage("Le numéro de license est requis");
+            .WithMessage("License number is required");
     }
 }

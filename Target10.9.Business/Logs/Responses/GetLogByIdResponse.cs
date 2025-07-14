@@ -1,6 +1,6 @@
 namespace Target10._9.Business.Logs.Responses;
 
-public class GetLogResponse
+public class GetLogByIdResponse
 {
     public string Action { get; set; } = null!;
     public string Details { get; set; } = null!;

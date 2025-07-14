@@ -13,6 +13,6 @@ public class GetSessionModeByIdQueryValidator : AbstractValidator<GetSessionMode
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("L'id est requis.");
+            .WithMessage("ID is required.");
     }
 }

@@ -16,18 +16,18 @@ public class AddSessionCommandValidator : AbstractValidator<AddSessionCommand>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage("Le nom est requis");
+            .WithMessage("Name is required.");
         
         RuleFor(x => x.DateStart)
             .NotEmpty()
-            .WithMessage("La Date de commencement est requise");
+            .WithMessage("The start date is required");
         
         RuleFor(x => x.DateEnd)
             .NotEmpty()
-            .WithMessage("La date de fin est requise");
+            .WithMessage("The end date is required");
         
         RuleFor(x => x.SessionModeId)
             .NotEmpty()
-            .WithMessage("La session est requise");
+            .WithMessage("Session mode is required.");
     }
 }

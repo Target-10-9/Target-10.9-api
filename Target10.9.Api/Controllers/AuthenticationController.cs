@@ -11,11 +11,6 @@ namespace Target10._9_api.Controllers
         IAuthenticationsService authenticationsService
     ) : ControllerBase
     {
-        /// <summary>
-        /// Inscription d'un nouvel utilisateur.
-        /// </summary>
-        /// <param name="request">Les informations d'inscription.</param>
-        /// <returns>Confirmation de l'inscription.</returns>
         [HttpPost("register")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -29,7 +24,7 @@ namespace Target10._9_api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new { message = "Cet email est déjà utilisé" });
+                return Conflict(new { message = "This email is already in use" });
             }
             catch (ArgumentException ex)
             {
@@ -50,7 +45,7 @@ namespace Target10._9_api.Controllers
             }
             catch (UnauthorizedAccessException)
             {
-                return Unauthorized(new { message = "Email ou mot de passe incorrect" });
+                return Unauthorized(new { message = "Incorrect email or password" });
             }
         }
     }

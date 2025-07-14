@@ -13,6 +13,6 @@ public class GetSessionByIdQueryValidator : AbstractValidator<GetSessionByIdQuer
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("La session ne peut pas être vide.");
+            .WithMessage("Session ID cannot be empty.");
     }
 }

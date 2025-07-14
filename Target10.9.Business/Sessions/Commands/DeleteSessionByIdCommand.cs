@@ -13,6 +13,6 @@ public class DeleteSessionByIdCommandValidator : AbstractValidator<DeleteSession
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("L'ID de l'utilisateur est requis");
+            .WithMessage("ID is required.");
     }
 }

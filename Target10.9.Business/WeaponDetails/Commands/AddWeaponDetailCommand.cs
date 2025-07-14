@@ -16,18 +16,18 @@ public class WeaponDetailCommandValidator : AbstractValidator<AddWeaponDetailCom
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage("Le nom est requis");
+            .WithMessage("Name is required");
         
         RuleFor(x => x.Brand)
             .NotEmpty()
-            .WithMessage("La marque est requise");
+            .WithMessage("The brand is required");
         
         RuleFor(x => x.Description)
             .NotEmpty()
-            .WithMessage("La description est requis");
+            .WithMessage("Description is required");
         
         RuleFor(x => x.SerialNumber)
             .NotEmpty()
-            .WithMessage("Le numero de série est requis");
+            .WithMessage("Serial number is required");
     }
 }

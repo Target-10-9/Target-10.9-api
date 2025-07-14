@@ -15,14 +15,14 @@ public class AddModeDetailCommandValidator : AbstractValidator<AddModeDetailComm
     {
         RuleFor(x => x.ShootLimit)
             .NotEmpty()
-            .WithMessage("Le nombre de tir limite est requis");
+            .WithMessage("The limit number of shots is required");
         
         RuleFor(x => x.ShootingTime)
             .NotEmpty()
-            .WithMessage("Le temps de tir est requis");
+            .WithMessage("Shooting time is required");
         
         RuleFor(x => x.RestTime)
             .NotEmpty()
-            .WithMessage("Le temps restant est requis");
+            .WithMessage("Rest time is required");
     }
 }
