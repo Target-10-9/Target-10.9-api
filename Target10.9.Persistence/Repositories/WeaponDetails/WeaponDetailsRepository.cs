@@ -46,4 +46,36 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
     }
     
     #endregion
+    
+    #region PUT
+    
+    public async Task<WeaponDetail> UpdateWeaponDetailAsync(
+        Guid id,
+        Guid userId,
+        string name,
+        string brand,
+        string description,
+        string serialNumber,
+        CancellationToken cancellationToken
+    )
+    {
+        var weaponDetail = await dbContext.WeaponDetails
+            .FirstOrDefaultAsync(w => w.Id == id && w.UserId == userId, cancellationToken);
+
+        if (weaponDetail == null)
+            throw new KeyNotFoundException("Weapon detail not found.");
+
+        weaponDetail.Name = name;
+        weaponDetail.Brand = brand;
+        weaponDetail.Description = description;
+        weaponDetail.SerialNumber = serialNumber;
+
+        dbContext.WeaponDetails.Update(weaponDetail);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return weaponDetail;
+    }
+    
+    #endregion
 }
