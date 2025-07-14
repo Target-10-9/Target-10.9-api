@@ -70,4 +70,19 @@ public class ModeDetailsRepository(ApplicationDbContext dbContext) : IModeDetail
     }
     
     #endregion
+    
+    #region Delete
+    
+    public async Task DeleteModeDetailByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var modeDetail = await dbContext.ModeDetails.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        
+        if (modeDetail == null)
+            throw new KeyNotFoundException($"ModeDetail with ID {id} not found.");
+        
+        dbContext.ModeDetails.Remove(modeDetail);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    #endregion
 }

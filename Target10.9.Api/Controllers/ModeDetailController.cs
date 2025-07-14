@@ -65,4 +65,18 @@ public class ModeDetailController(
     }
     
     #endregion
+    
+    #region Delete
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteModeDetail(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteModeDetailByIdCommand { Id = id };
+        await modeDetailsService.DeleteModeDetailByIdAsync(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    #endregion
 }

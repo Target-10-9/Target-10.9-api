@@ -22,6 +22,10 @@ namespace Target10._9.Business.ModeDetails
         #region Put
         Task<UpdateModeDetailByIdResponse> UpdateModeDetailByIdAsync(Guid id, UpdateModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
+        
+        #region Delete
+        Task DeleteModeDetailByIdAsync(DeleteModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
     }
 
     public class ModeDetailsService(
@@ -103,6 +107,22 @@ namespace Target10._9.Business.ModeDetails
             );
 
             return mapper.Map<UpdateModeDetailByIdResponse>(modeDetail);
+        }
+        
+        #endregion
+        
+        #region Delete
+        
+        public async Task DeleteModeDetailByIdAsync(DeleteModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            await modeDetailsRepository.DeleteModeDetailByIdAsync(command.Id, cancellationToken);
         }
         
         #endregion
