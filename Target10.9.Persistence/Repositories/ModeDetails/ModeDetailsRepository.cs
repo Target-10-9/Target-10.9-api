@@ -20,6 +20,30 @@ public class ModeDetailsRepository(ApplicationDbContext dbContext) : IModeDetail
     
     #endregion
     
+    #region Post
+    
+    public async Task<ModeDetail> AddModeDetailAsync(
+        int shootLimit,
+        TimeOnly shootingTime,
+        TimeOnly restTime,
+        CancellationToken cancellationToken
+    )
+    {
+        var modeDetail = new ModeDetail
+        {
+            ShootLimit = shootLimit,
+            ShootingTime = shootingTime,
+            RestTime = restTime
+        };
+
+        await dbContext.ModeDetails.AddAsync(modeDetail, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return modeDetail;
+    }
+    
+    #endregion
+    
     #region Put
     
     public async Task<ModeDetail> UpdateModeDetailByIdAsync(

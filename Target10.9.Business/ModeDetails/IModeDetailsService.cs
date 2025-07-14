@@ -15,6 +15,10 @@ namespace Target10._9.Business.ModeDetails
         Task<GetModeDetailByIdResponse> GetModeDetailByIdAsync(GetModeDetailByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
+        #region Post
+        Task<AddModeDetailResponse> AddModeDetailAsync(AddModeDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        #endregion
+        
         #region Put
         Task<UpdateModeDetailByIdResponse> UpdateModeDetailByIdAsync(Guid id, UpdateModeDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
@@ -54,6 +58,29 @@ namespace Target10._9.Business.ModeDetails
             return mapper.Map<GetModeDetailByIdResponse>(modeDetail);
         }
 
+        #endregion
+        
+        #region Post
+        
+        public async Task<AddModeDetailResponse> AddModeDetailAsync(AddModeDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            var modeDetail = await modeDetailsRepository.AddModeDetailAsync(
+                command.ShootLimit,
+                command.ShootingTime,
+                command.RestTime,
+                cancellationToken
+            );
+
+            return mapper.Map<AddModeDetailResponse>(modeDetail);
+        }
+        
         #endregion
         
         #region Put
