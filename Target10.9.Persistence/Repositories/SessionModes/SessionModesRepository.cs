@@ -8,17 +8,19 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
 {
     #region Get
     
-    public Task<List<SessionMode>> GetSessionModesAsync(Guid userId, CancellationToken cancellationToken)
+    public Task<List<SessionMode>> GetSessionModesAsync(CancellationToken cancellationToken)
     {
-        return dbContext.SessionModes
-            .Include(sm => sm.Sessions)
-            .Where(sm => sm.Sessions.Any(s => s.UserId == userId))
-            .ToListAsync(cancellationToken);
+        return dbContext.SessionModes.ToListAsync(cancellationToken);
+    }
+    
+    public Task<SessionMode> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return dbContext.SessionModes.FirstOrDefaultAsync(sm => sm.Id == id, cancellationToken);
     }
     
     #endregion
     
-    #region POST
+    #region Post
     
     public async Task<SessionMode> AddSessionModeAsync(
         string name,

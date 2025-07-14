@@ -9,7 +9,7 @@ public interface IWeaponDetailsRepository
     Task<WeaponDetail> GetWeaponDetailByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken);
     #endregion
 
-    #region POST
+    #region Post
     Task<WeaponDetail> AddWeaponDetailAsync(
         Guid userId,
         string name,
@@ -20,7 +20,7 @@ public interface IWeaponDetailsRepository
     );
     #endregion
     
-    #region PUT
+    #region Put
     Task<WeaponDetail> UpdateWeaponDetailAsync(
         Guid id,
         Guid userId,

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Target10._9.Business.Services;
 using Target10._9.Business.SessionModes.Commands;
+using Target10._9.Business.SessionModes.Queries;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModes.Responses;
 
@@ -11,9 +12,10 @@ namespace Target10._9.Business.SessionModes
     {
         #region Get
         Task<List<GetSessionModesResponse>> GetSessionModesAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<GetSessionModeByIdResponse> GetSessionModeByIdAsync(GetSessionModeByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
-        #region POST
+        #region Post
         Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
     }
@@ -33,14 +35,28 @@ namespace Target10._9.Business.SessionModes
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
-            var sessionModes = await sessionModesRepository.GetSessionModesAsync(userIdGuid, cancellationToken);
+            var sessionModes = await sessionModesRepository.GetSessionModesAsync(cancellationToken);
 
             return mapper.Map<List<GetSessionModesResponse>>(sessionModes);
+        }
+        
+        public async Task<GetSessionModeByIdResponse> GetSessionModeByIdAsync(GetSessionModeByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(query, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var sessionMode = await sessionModesRepository.GetSessionModeByIdAsync(query.Id, cancellationToken);
+            
+            return mapper.Map<GetSessionModeByIdResponse>(sessionMode);
         }
 
         #endregion
         
-        #region POST
+        #region Post
         
         public async Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {

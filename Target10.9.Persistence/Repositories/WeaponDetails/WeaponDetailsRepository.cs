@@ -23,7 +23,7 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
 
     #endregion
     
-    #region POST
+    #region Post
     
     public async Task<WeaponDetail> AddWeaponDetailAsync(
         Guid userId,
@@ -53,7 +53,7 @@ public class WeaponDetailsRepository(ApplicationDbContext dbContext) : IWeaponDe
     
     #endregion
     
-    #region PUT
+    #region Put
     
     public async Task<WeaponDetail> UpdateWeaponDetailAsync(
         Guid id,

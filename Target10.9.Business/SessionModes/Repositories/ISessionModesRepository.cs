@@ -5,10 +5,11 @@ namespace Target10._9.Business.SessionModes.Repositories;
 public interface ISessionModesRepository
 {
     #region Get
-    Task<List<SessionMode>> GetSessionModesAsync(Guid userId, CancellationToken cancellationToken);
+    Task<List<SessionMode>> GetSessionModesAsync(CancellationToken cancellationToken);
+    Task<SessionMode> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
     #endregion
     
-    #region POST
+    #region Post
     Task<SessionMode> AddSessionModeAsync(
         string name,
         TimeOnly timeLimits,

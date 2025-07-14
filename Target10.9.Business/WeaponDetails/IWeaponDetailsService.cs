@@ -12,14 +12,14 @@ namespace Target10._9.Business.WeaponDetails
     {
         #region Get
         Task<List<GetWeaponDetailsResponse>> GetWeaponDetailsAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
-        Task<GetWeaponDetailByIdResponse> GetWeaponDetailsByIdAsync(GetWeaponDetailByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<GetWeaponDetailByIdResponse> GetWeaponDetailByIdAsync(GetWeaponDetailByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
-        #region POST
+        #region Post
         Task<AddWeaponDetailResponse> AddWeaponDetailAsync(AddWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
-        #region PUT
+        #region Put
         Task<UpdateWeaponDetailByIdResponse> UpdateWeaponDetailByIdAsync(Guid id, UpdateWeaponDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         #endregion
         
@@ -48,7 +48,7 @@ namespace Target10._9.Business.WeaponDetails
             return mapper.Map<List<GetWeaponDetailsResponse>>(weapons);
         }
         
-        public async Task<GetWeaponDetailByIdResponse> GetWeaponDetailsByIdAsync(GetWeaponDetailByIdQuery query,  ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<GetWeaponDetailByIdResponse> GetWeaponDetailByIdAsync(GetWeaponDetailByIdQuery query,  ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(query, cancellationToken);
             
@@ -67,7 +67,7 @@ namespace Target10._9.Business.WeaponDetails
         
         #endregion
         
-        #region POST
+        #region Post
         
         public async Task<AddWeaponDetailResponse> AddWeaponDetailAsync(AddWeaponDetailCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
@@ -92,7 +92,7 @@ namespace Target10._9.Business.WeaponDetails
         
         #endregion
         
-        #region PUT
+        #region Put
         
         public async Task<UpdateWeaponDetailByIdResponse> UpdateWeaponDetailByIdAsync(Guid id, UpdateWeaponDetailByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {

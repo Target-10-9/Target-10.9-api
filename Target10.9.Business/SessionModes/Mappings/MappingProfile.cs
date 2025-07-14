@@ -9,6 +9,7 @@ namespace Target10._9.Business.SessionModes.Mappings
         public MappingProfile()
         {
             CreateMap<SessionMode, GetSessionModesResponse>();
+            CreateMap<SessionMode, GetSessionModeByIdResponse>();
             
             CreateMap<SessionMode, AddSessionModeResponse>();
         }
