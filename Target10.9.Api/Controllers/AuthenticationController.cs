@@ -37,16 +37,9 @@ namespace Target10._9_api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var response = await authenticationsService.LoginAsync(command, cancellationToken);
-                return Ok(response);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Unauthorized(new { message = "Incorrect email or password" });
-            }
+        { 
+            var response = await authenticationsService.LoginAsync(command, cancellationToken);
+            return Ok(response);
         }
     }
 }
