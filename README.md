@@ -13,3 +13,23 @@ API principale en charge de recevoir et traiter les données des capteurs, gére
 - ✅ Sauvegarder les sessions et afficher des statistiques.
 
 ## 🚀 Stack technique
+
+
+
+## Tuto de Camille 
+
+Pour mettre à jour l'API
+```bash
+  docker-compose up -d --build api
+```
+
+### POUR FABIEN !!!
+```bash
+  ssh -i "TargetKeyGen1.pem" ec2-user@ec2-35-180-55-188.eu-west-3.compute.amazonaws.com
+```
+
+se connecter a l'API héberger sur EC2 : http://35.180.55.188:5000/swagger
+
+Lien du site  : http://localhost/login <br>
+Lien du swagger : http://localhost:5000/swagger/index.html
+
