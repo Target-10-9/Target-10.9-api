@@ -23,7 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Target10.9.Business\Target10.9.Business.csproj" />
-      <ProjectReference Include="..\Target10.9.Persistence\Target10.9.Persistence.csproj" />
+      <ProjectReference Include="..\Target10.9.Persistence\Target10.9.Persistence.csproj" />      
     </ItemGroup>
 
 </Project>

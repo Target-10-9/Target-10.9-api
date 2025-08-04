@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Target10._9_api;
 using Target10._9_api.Configurations;
@@ -51,10 +52,33 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerOptions();
 
-builder.Services.AddPersistenceDependencies();
+builder.Services.AddPersistenceDependencies(builder.Configuration);
 builder.Services.AddBusinessDependencies();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var cfg    = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    var cs     = cfg.GetConnectionString("DefaultConnection");
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    
+    logger.LogInformation("▶️ Tentative de migration sur « {CS} »", cs);
+    try
+    {
+        db.Database.Migrate();
+        logger.LogInformation("✅ Migration réussie.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "❌ Migration échouée !");
+        throw;
+    }
+}
+
+
+
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

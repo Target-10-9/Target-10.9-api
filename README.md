@@ -28,8 +28,89 @@ Pour mettre à jour l'API
   ssh -i "TargetKeyGen1.pem" ec2-user@ec2-35-180-55-188.eu-west-3.compute.amazonaws.com
 ```
 
-se connecter a l'API héberger sur EC2 : http://35.180.55.188:5000/swagger
+### dans le Power Shell de EC2 
+
+pour se connecter a la DB 
+```bash
+    docker exec -it target10_postgres psql -U target_user -d target_db
+```
+
+pour litser les tables 
+```bash
+    \dt
+```
+
+se connecter a l'API héberger sur EC2 : http://15.237.123.103:5000/swagger
 
 Lien du site  : http://localhost/login <br>
 Lien du swagger : http://localhost:5000/swagger/index.html
+
+
+
+## Pour mettre en place les migrations :
+il faut tellecharger le SDK de dotnet et run manuellement la migration
+
+### Sur EC2 après etre connecter : 
+
+Se situer dans le dosser app : 
+```bash
+     cd /home/ec2-user/app
+```
+
+checker la version de dotnet
+```bash
+     dotnet --version
+```
+Au cas où désinstaller 
+```bash
+     => chercher chat
+```
+Installer dotnet 8
+```bash
+     curl -sSL https://dot.net/v1/dotnet-install.sh | sudo bash /dev/stdin --channel 8.0 --install-dir /usr/share/dotnet
+```
+controler les runtimes :
+```bash
+     dotnet --list-runtimes
+```
+résultat :
+
+```bash
+     Microsoft.AspNetCore.App 8.0.18 [/home/ec2-user/.dotnet/shared/Microsoft.AspNetCore.App]
+     Microsoft.NETCore.App 8.0.18 [/home/ec2-user/.dotnet/shared/Microsoft.NETCore.App]
+```
+
+Télécharger dotnet tool : 
+```bash
+     dotnet tool install --global dotnet-ef --version 8.0.0
+     
+```
+
+Metre le tout en variable d'environment :
+```bash
+     export PATH="$PATH:/home/ec2-user/.dotnet:/home/ec2-user/.dotnet/tools"
+     echo $PATH
+```
+
+Résultat → position de l'élément dans l'environment 
+```bash
+     dotnet --list-runtimes
+```
+
+Voir si le .csproj de persistance existe : 
+```bash
+     find /home/ec2-user/app -name "*.csproj"
+```
+
+Lancer la migration :
+
+```bash
+     dotnet ef database update \
+  --project Target10.9.Persistence/Target10.9.Persistence.csproj \
+  --startup-project Target10.9.Api/Target10.9.Api.csproj
+```
+
+Avec ces étapes aller dans le docker et regarder existences des tables 
+
+
 

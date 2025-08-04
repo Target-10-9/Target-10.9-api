@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.ModeDetails.Repositories;
@@ -18,10 +20,20 @@ namespace Target10._9.Persistence;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPersistenceDependencies(this IServiceCollection services)
+    public static IServiceCollection AddPersistenceDependencies(
+        this IServiceCollection services,
+        IConfiguration configuration)    // ← on ajoute IConfiguration
     {
         services.AddSingleton<IDbConfiguration, DefaultDbConfiguration>();
-        services.AddDbContext<ApplicationDbContext>();
+
+        // ← on configure explicitement le DbContext avec la chaîne et l’assembly de migrations
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(
+                configuration.GetConnectionString("DefaultConnection"),
+                sql => sql.MigrationsAssembly("Target10.9.Persistence")
+            )
+        );
+
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<ILogsRepository, LogsRepository>();
         services.AddScoped<IModeDetailsRepository, ModeDetailsRepository>();
