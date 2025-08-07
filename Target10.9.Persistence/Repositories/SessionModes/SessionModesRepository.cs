@@ -120,5 +120,17 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         await dbContext.SaveChangesAsync(cancellationToken);
     }
     
+    public async Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+    {
+        var entity = await dbContext.SessionModeWeaponDetails
+            .FirstOrDefaultAsync(x => x.SessionModeId == sessionModeId && x.WeaponDetailsId == weaponDetailsId, cancellationToken);
+
+        if (entity is not null)
+        {
+            dbContext.SessionModeWeaponDetails.Remove(entity);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+    }
+    
     #endregion
 }

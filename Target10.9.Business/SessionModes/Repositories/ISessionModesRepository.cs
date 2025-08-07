@@ -44,5 +44,9 @@ public interface ISessionModesRepository
     
     #region Delete
     Task DeleteSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId,
+        CancellationToken cancellationToken);
+
     #endregion
 }
