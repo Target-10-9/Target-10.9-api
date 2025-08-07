@@ -33,6 +33,9 @@ namespace Target10._9.Business.SessionModes
         
         #region Delete
         Task DeleteSessionModeByIdAsync(DeleteSessionModeByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+
+        Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId,
+            CancellationToken cancellationToken);
         #endregion
     }
 
@@ -117,7 +120,6 @@ namespace Target10._9.Business.SessionModes
                 cancellationToken
             );
         }
-
         
         #endregion
         
@@ -173,6 +175,11 @@ namespace Target10._9.Business.SessionModes
                 userIdGuid,
                 cancellationToken
             );
+        }
+        
+        public async Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+        {
+            await sessionModesRepository.RemoveAuthorizedWeaponAsync(sessionModeId, weaponDetailsId, cancellationToken);
         }
         
         #endregion

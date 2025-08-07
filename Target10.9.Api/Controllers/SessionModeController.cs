@@ -97,5 +97,13 @@ public class SessionModeController(
         return NoContent();
     }
     
+    [HttpDelete("{sessionModeId:guid}/weapons/{weaponDetailsId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveAuthorizedWeapon(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+    {
+        await sessionModesService.RemoveAuthorizedWeaponAsync(sessionModeId, weaponDetailsId, cancellationToken);
+        return NoContent();
+    }
+    
     #endregion
 }
