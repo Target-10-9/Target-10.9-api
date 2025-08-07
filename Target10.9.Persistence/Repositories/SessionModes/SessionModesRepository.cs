@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.SessionModes.Repositories;
+using Target10._9.Business.WeaponDetails.Entities;
 
 namespace Target10._9.Persistence.Repositories.SessionModes;
 
@@ -16,6 +17,15 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
     public Task<SessionMode?> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return dbContext.SessionModes.FirstOrDefaultAsync(sm => sm.Id == id, cancellationToken);
+    }
+
+    public Task<List<WeaponDetail>> GetAuthorizedWeaponsAsync(Guid sessionModeId, CancellationToken cancellationToken)
+    {
+        return dbContext.SessionModeWeaponDetails
+            .Where(x => x.SessionModeId == sessionModeId)
+            .Include(x => x.WeaponDetails)
+            .Select(x => x.WeaponDetails)
+            .ToListAsync(cancellationToken);
     }
     
     #endregion
