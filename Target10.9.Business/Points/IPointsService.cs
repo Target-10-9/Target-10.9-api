@@ -2,6 +2,7 @@
 using AutoMapper;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Points.Commands;
+using Target10._9.Business.Points.Queries;
 using Target10._9.Business.Points.Repositories;
 using Target10._9.Business.Points.Responses;
 using Target10._9.Business.Services;
@@ -12,6 +13,9 @@ namespace Target10._9.Business.Points
     {
         #region Get
         Task<List<GetPointsResponse>> GetPointsAsync(ClaimsPrincipal user, CancellationToken cancellationToken);
+
+        Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser,
+            CancellationToken cancellationToken);
         #endregion
         
         #region Post
@@ -41,6 +45,23 @@ namespace Target10._9.Business.Points
             var points = await pointsRepository.GetPointsAsync(userIdGuid, cancellationToken);
 
             return mapper.Map<List<GetPointsResponse>>(points);
+        }
+        
+        public async Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(query, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var point = await pointsRepository.GetPointByIdAsync(query.Id, userIdGuid, cancellationToken);
+            
+            if (point == null)
+                throw new KeyNotFoundException("Session not found.");
+
+            return mapper.Map<GetPointByIdResponse>(point);
         }
         
         #endregion
