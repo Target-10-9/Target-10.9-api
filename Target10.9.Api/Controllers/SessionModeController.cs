@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.SessionModes;
 using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
+using Target10._9.Business.SessionModeWeaponDetails.Commands;
 using Target10._9.Business.SessionModeWeaponDetails.Queries;
 
 namespace Target10._9_api.Controllers;
@@ -58,6 +59,16 @@ public class SessionModeController(
         var result = await sessionModesService.AddSessionModeAsync(command, User, cancellationToken);
         return Ok(result);
     }
+    
+    [HttpPost("{sessionModeId:guid}/weapons")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddAuthorizedWeapon(Guid sessionModeId, [FromBody] AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
+    {
+        await sessionModesService.AddAuthorizedWeaponAsync(sessionModeId, command, cancellationToken);
+        return NoContent();
+    }
+
     
     #endregion
     

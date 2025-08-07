@@ -22,6 +22,12 @@ public interface ISessionModesRepository
         Guid modeDetailId,
         CancellationToken cancellationToken
     );
+
+    Task AddAuthorizedWeaponAsync(
+        Guid sessionModeId, 
+        Guid weaponDetailId,
+        CancellationToken cancellationToken
+    );
     #endregion
     
     #region Put
