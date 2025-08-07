@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Authentications\" />
-      <Folder Include="SessionModeWeaponDetails\Commands\" />
     </ItemGroup>
 
 </Project>

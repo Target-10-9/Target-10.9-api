@@ -6,6 +6,8 @@ using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModes.Responses;
+using Target10._9.Business.SessionModeWeaponDetails.Commands;
+using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.SessionModeWeaponDetails.Queries;
 using Target10._9.Business.SessionModeWeaponDetails.Responses;
 
@@ -21,6 +23,8 @@ namespace Target10._9.Business.SessionModes
         
         #region Post
         Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command,
+            CancellationToken cancellationToken);
         #endregion
         
         #region Put
@@ -104,6 +108,16 @@ namespace Target10._9.Business.SessionModes
 
             return mapper.Map<AddSessionModeResponse>(sessionMode);
         }
+        
+        public async Task AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
+        {
+            await sessionModesRepository.AddAuthorizedWeaponAsync(
+                sessionModeId,
+                command.WeaponDetailId,
+                cancellationToken
+            );
+        }
+
         
         #endregion
         

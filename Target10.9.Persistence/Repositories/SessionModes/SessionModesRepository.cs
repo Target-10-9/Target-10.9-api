@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.SessionModes.Repositories;
+using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.WeaponDetails.Entities;
 
 namespace Target10._9.Persistence.Repositories.SessionModes;
@@ -55,6 +56,20 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         await dbContext.SaveChangesAsync(cancellationToken);
         
         return sessionMode;
+    }
+    
+    public async Task AddAuthorizedWeaponAsync(
+        Guid sessionModeId,
+        Guid weaponDetailId,
+        CancellationToken cancellationToken)
+    {
+        var entity = new SessionModeWeaponDetail
+        {
+            SessionModeId = sessionModeId,
+            WeaponDetailsId = weaponDetailId
+        };
+        dbContext.SessionModeWeaponDetails.Add(entity);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
     
     #endregion
