@@ -16,6 +16,13 @@ public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepositor
             .ToListAsync(cancellationToken);
     }
     
+    public Task<Point?> GetPointByIdAsync(Guid pointId, Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Points
+            .Include(p => p.Session)
+            .FirstOrDefaultAsync(p => p.Id == pointId && p.Session.UserId == userId, cancellationToken);
+    }
+    
     #endregion
     
     #region Post

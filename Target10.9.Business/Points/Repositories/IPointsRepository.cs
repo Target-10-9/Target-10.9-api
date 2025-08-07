@@ -6,6 +6,7 @@ public interface IPointsRepository
 {
     #region Get
     Task<List<Point>> GetPointsAsync(Guid userId, CancellationToken cancellationToken);
+    Task<Point?> GetPointByIdAsync(Guid pointId, Guid userId, CancellationToken cancellationToken);
     #endregion
     
     #region Post
