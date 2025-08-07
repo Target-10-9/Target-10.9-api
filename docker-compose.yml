@@ -93,6 +93,7 @@ services:
       - target10net
 
 volumes:
+  dataprotectionkeys:
   postgres_data:
 
 networks:
