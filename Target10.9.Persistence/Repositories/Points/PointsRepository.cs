@@ -6,7 +6,7 @@ namespace Target10._9.Persistence.Repositories.Points;
 
 public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepository
 {
-    #region Get
+    #region GET
     
     public Task<List<Point>> GetPointsAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -16,9 +16,16 @@ public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepositor
             .ToListAsync(cancellationToken);
     }
     
+    public Task<Point?> GetPointByIdAsync(Guid pointId, Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Points
+            .Include(p => p.Session)
+            .FirstOrDefaultAsync(p => p.Id == pointId && p.Session.UserId == userId, cancellationToken);
+    }
+    
     #endregion
     
-    #region Post
+    #region POST
     
     public async Task<Point> AddPointAsync(
         float X_Coordinate,
@@ -42,6 +49,24 @@ public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepositor
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return point;
+    }
+    
+    #endregion
+    
+    #region DELETE
+    
+    public async Task DeletePointByIdAsync(Guid pointId, Guid userId, CancellationToken cancellationToken)
+    {
+        var point = await dbContext.Points
+            .Include(p => p.Session)
+            .FirstOrDefaultAsync(p => p.Id == pointId && p.Session.UserId == userId, cancellationToken);
+        
+        if (point == null)
+            throw new KeyNotFoundException("Point not found.");
+
+        dbContext.Points.Remove(point);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
     
     #endregion

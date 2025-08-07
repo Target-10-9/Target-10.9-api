@@ -6,7 +6,7 @@ namespace Target10._9.Persistence.Repositories.Sessions;
 
 public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepository
 {
-    #region Get
+    #region GET
 
     public Task<List<Session>> GetSessionsAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
 
     #endregion
     
-    #region Post
+    #region POST
     
     public async Task<Session> AddSessionAsync(
         Guid userId,
@@ -53,7 +53,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     
     #endregion
     
-    #region Put
+    #region PUT
     
     public async Task<Session?> UpdateSessionByIdAsync(
         Guid sessionId,
@@ -85,7 +85,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     
     #endregion
     
-    #region Delete
+    #region DELETE
     
     public async Task DeleteSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken)
     {
