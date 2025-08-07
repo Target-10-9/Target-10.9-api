@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Target10._9.Business.Logs.Entities;
 using Target10._9.Business.ModeDetails.Entities;
+using Target10._9.Business.Points.Entities;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.Sessions.Entities;
@@ -30,6 +31,7 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<ModeDetail> ModeDetails { get; set; }
     public virtual DbSet<SessionModeWeaponDetail> SessionModeWeaponDetails { get; set; }
     public virtual DbSet<WeaponDetail> WeaponDetails { get; set; }
+    public virtual DbSet<Point> Points { get; set; }
     
     #endregion DbSets
     

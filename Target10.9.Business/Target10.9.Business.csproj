@@ -22,6 +22,7 @@
 
     <ItemGroup>
       <Folder Include="Authentications\" />
+      <Folder Include="Points\Queries\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
       <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>

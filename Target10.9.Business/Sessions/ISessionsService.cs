@@ -45,9 +45,9 @@ namespace Target10._9.Business.Sessions
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
-            var weapons = await sessionsRepository.GetSessionsAsync(userIdGuid, cancellationToken);
+            var sessions = await sessionsRepository.GetSessionsAsync(userIdGuid, cancellationToken);
 
-            return mapper.Map<List<GetSessionsResponse>>(weapons);
+            return mapper.Map<List<GetSessionsResponse>>(sessions);
         }
         
         public async Task<GetSessionByIdResponse> GetSessionByIdAsync(GetSessionByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
