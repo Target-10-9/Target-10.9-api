@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.ModeDetails.Repositories;
+using Target10._9.Business.Points.Repositories;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModeWeaponDetails.Repositories;
 using Target10._9.Business.Sessions.Repositories;
@@ -8,6 +9,7 @@ using Target10._9.Business.Users.Repositories;
 using Target10._9.Business.WeaponDetails.Repositories;
 using Target10._9.Persistence.Repositories.Logs;
 using Target10._9.Persistence.Repositories.ModeDetails;
+using Target10._9.Persistence.Repositories.Points;
 using Target10._9.Persistence.Repositories.SessionModes;
 using Target10._9.Persistence.Repositories.SessionModeWeaponDetails;
 using Target10._9.Persistence.Repositories.Sessions;
@@ -29,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ISessionModeWeaponDetailsRepository, SessionModeWeaponDetailsRepository>();
         services.AddScoped<ISessionsRepository, SessionsRepository>();
         services.AddScoped<IWeaponDetailsRepository, WeaponDetailsRepository>();
+        services.AddScoped<IPointsRepository, PointsRepository>();
 
         return services;
     }

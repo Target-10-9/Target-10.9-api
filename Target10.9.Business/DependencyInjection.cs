@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Target10._9.Business.Authentications;
 using Target10._9.Business.Logs;
 using Target10._9.Business.ModeDetails;
+using Target10._9.Business.Points;
 using Target10._9.Business.Services;
 using Target10._9.Business.SessionModes;
 using Target10._9.Business.SessionModeWeaponDetails;
@@ -28,6 +29,7 @@ public static class DependencyInjection
             .AddSessionModesDependencies()
             .AddModeDetailsDependencies()
             .AddSessionModeWeaponDetailsDependencies()
+            .AddPointsDependencies()
             .AddScoped<IValidationService, ValidationService>()
             .AddValidatorsFromAssembly(businessAssembly);
     }

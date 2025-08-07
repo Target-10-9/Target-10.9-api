@@ -1,3 +1,4 @@
+using Target10._9.Business.Points.Entities;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.Users.Entities;
 
@@ -14,4 +15,6 @@ public class Session
     
     public User Users { get; set; } = null!;
     public SessionMode SessionModes { get; set; } = null!;
+    
+    public ICollection<Point> Points { get; set; } = new List<Point>();
 }
