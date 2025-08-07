@@ -6,6 +6,8 @@ using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModes.Responses;
+using Target10._9.Business.SessionModeWeaponDetails.Queries;
+using Target10._9.Business.SessionModeWeaponDetails.Responses;
 
 namespace Target10._9.Business.SessionModes
 {
@@ -14,6 +16,7 @@ namespace Target10._9.Business.SessionModes
         #region Get
         Task<List<GetSessionModesResponse>> GetSessionModesAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken);
         Task<GetSessionModeByIdResponse> GetSessionModeByIdAsync(GetSessionModeByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<List<GetAuthorizedWeaponResponse>> GetAuthorizedWeaponsAsync(GetAuthorizedWeaponsQuery query, CancellationToken cancellationToken);
         #endregion
         
         #region Post
@@ -62,6 +65,12 @@ namespace Target10._9.Business.SessionModes
             var sessionMode = await sessionModesRepository.GetSessionModeByIdAsync(query.Id, cancellationToken);
             
             return mapper.Map<GetSessionModeByIdResponse>(sessionMode);
+        }
+        
+        public async Task<List<GetAuthorizedWeaponResponse>> GetAuthorizedWeaponsAsync(GetAuthorizedWeaponsQuery query, CancellationToken cancellationToken)
+        {
+            var weapons = await sessionModesRepository.GetAuthorizedWeaponsAsync(query.Id, cancellationToken);
+            return mapper.Map<List<GetAuthorizedWeaponResponse>>(weapons);
         }
 
         #endregion

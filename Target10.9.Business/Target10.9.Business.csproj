@@ -23,7 +23,6 @@
     <ItemGroup>
       <Folder Include="Authentications\" />
       <Folder Include="SessionModeWeaponDetails\Commands\" />
-      <Folder Include="SessionModeWeaponDetails\Responses\" />
     </ItemGroup>
 
 </Project>

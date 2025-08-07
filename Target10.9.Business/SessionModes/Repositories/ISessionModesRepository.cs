@@ -1,4 +1,5 @@
 using Target10._9.Business.SessionModes.Entities;
+using Target10._9.Business.WeaponDetails.Entities;
 
 namespace Target10._9.Business.SessionModes.Repositories;
 
@@ -7,6 +8,9 @@ public interface ISessionModesRepository
     #region Get
     Task<List<SessionMode>> GetSessionModesAsync(CancellationToken cancellationToken);
     Task<SessionMode?> GetSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    public Task<List<WeaponDetail>> GetAuthorizedWeaponsAsync(Guid sessionModeId,
+        CancellationToken cancellationToken);
     #endregion
     
     #region Post
