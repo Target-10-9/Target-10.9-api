@@ -48,4 +48,18 @@ public class PointController(
     }
     
     #endregion
+    
+    #region Delete
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeletePointById(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeletePointByIdCommand { Id = id };
+        await pointsService.DeletePointByIdAsync(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    #endregion
 }

@@ -11,16 +11,21 @@ namespace Target10._9.Business.Points
 {
     public interface IPointsService
     {
-        #region Get
+        #region GET
         Task<List<GetPointsResponse>> GetPointsAsync(ClaimsPrincipal user, CancellationToken cancellationToken);
 
         Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser,
             CancellationToken cancellationToken);
         #endregion
         
-        #region Post
-
+        #region POST
         Task<AddPointResponse> AddPointAsync(AddPointCommand command, ClaimsPrincipal currentUser,
+            CancellationToken cancellationToken);
+        #endregion
+        
+        #region DELETE
+
+        Task DeletePointByIdAsync(DeletePointByIdCommand command, ClaimsPrincipal currentUser,
             CancellationToken cancellationToken);
 
         #endregion
@@ -33,7 +38,7 @@ namespace Target10._9.Business.Points
         IMapper mapper
         ) : IPointsService
     {
-        #region Get
+        #region GET
         
         public async Task<List<GetPointsResponse>> GetPointsAsync(ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
@@ -59,14 +64,14 @@ namespace Target10._9.Business.Points
             var point = await pointsRepository.GetPointByIdAsync(query.Id, userIdGuid, cancellationToken);
             
             if (point == null)
-                throw new KeyNotFoundException("Session not found.");
+                throw new KeyNotFoundException("Point not found.");
 
             return mapper.Map<GetPointByIdResponse>(point);
         }
         
         #endregion
         
-        #region Post
+        #region POST
         
         public async Task<AddPointResponse> AddPointAsync(AddPointCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
@@ -86,13 +91,36 @@ namespace Target10._9.Business.Points
             );
             
             await logsRepository.AddLogAsync(
-                "Session Created",
+                "Point Created",
                 $"Point created by user {userIdGuid}.",
                 userIdGuid,
                 cancellationToken
             );
 
             return mapper.Map<AddPointResponse>(pointResponse);
+        }
+        
+        #endregion
+        
+        #region DELETE
+        
+        public async Task DeletePointByIdAsync(DeletePointByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        {
+            await validationService.ValidateAsync(command, cancellationToken);
+            
+            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            if (!Guid.TryParse(userId, out var userIdGuid))
+                throw new UnauthorizedAccessException("Invalid user identifier.");
+
+            await pointsRepository.DeletePointByIdAsync(command.Id, userIdGuid, cancellationToken);
+            
+            await logsRepository.AddLogAsync(
+                "Point Deleted",
+                $"Point with ID {command.Id} deleted by user {userIdGuid}.",
+                userIdGuid,
+                cancellationToken
+            );
         }
         
         #endregion
