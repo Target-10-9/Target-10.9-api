@@ -9,6 +9,8 @@ namespace Target10._9.Business.Points.Mappings
         public MappingProfile()
         {
             CreateMap<Point, GetPointsResponse>();
+            
+            CreateMap<Point, AddPointResponse>();
         }
     }
 }
