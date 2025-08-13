@@ -65,8 +65,8 @@ public class SessionModeController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddAuthorizedWeapon(Guid sessionModeId, [FromBody] AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
     {
-        await sessionModesService.AddAuthorizedWeaponAsync(sessionModeId, command, cancellationToken);
-        return NoContent();
+        var newWeapon = await sessionModesService.AddAuthorizedWeaponAsync(sessionModeId, command, cancellationToken);
+        return Ok(newWeapon);
     }
 
     

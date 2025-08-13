@@ -18,6 +18,11 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     public Task<Session?> GetSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken)
     {
         return dbContext.Sessions
+            .Include(s => s.SessionModes)
+                .ThenInclude(sm => sm.ModeDetails)
+            .Include(s => s.SessionModes)
+                .ThenInclude(sm => sm.SessionModeWeaponDetails)
+                    .ThenInclude(smw => smw.WeaponDetails)
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
     }
 

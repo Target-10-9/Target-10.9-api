@@ -58,7 +58,7 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         return sessionMode;
     }
     
-    public async Task AddAuthorizedWeaponAsync(
+    public async Task<SessionModeWeaponDetail> AddAuthorizedWeaponAsync(
         Guid sessionModeId,
         Guid weaponDetailId,
         CancellationToken cancellationToken)
@@ -70,6 +70,8 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         };
         dbContext.SessionModeWeaponDetails.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return entity;
     }
     
     #endregion

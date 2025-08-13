@@ -23,7 +23,7 @@ namespace Target10._9.Business.SessionModes
         
         #region Post
         Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
-        Task AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command,
+        Task<AddAuthorizedWeaponResponse> AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command,
             CancellationToken cancellationToken);
         #endregion
         
@@ -112,13 +112,15 @@ namespace Target10._9.Business.SessionModes
             return mapper.Map<AddSessionModeResponse>(sessionMode);
         }
         
-        public async Task AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
+        public async Task<AddAuthorizedWeaponResponse> AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
         {
-            await sessionModesRepository.AddAuthorizedWeaponAsync(
+            var newWeapon = await sessionModesRepository.AddAuthorizedWeaponAsync(
                 sessionModeId,
                 command.WeaponDetailId,
                 cancellationToken
             );
+            
+            return mapper.Map<AddAuthorizedWeaponResponse>(newWeapon);
         }
         
         #endregion
