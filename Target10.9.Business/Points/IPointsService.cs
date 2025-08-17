@@ -14,7 +14,7 @@ namespace Target10._9.Business.Points
         #region GET
         Task<List<GetPointsResponse>> GetPointsAsync(ClaimsPrincipal user, CancellationToken cancellationToken);
 
-        Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser,
+        Task<List<GetPointsBySessionIdResponse>> GetPointsBySessionIdAsync(GetPointsBySessionIdQuery query, ClaimsPrincipal currentUser,
             CancellationToken cancellationToken);
         #endregion
         
@@ -52,7 +52,7 @@ namespace Target10._9.Business.Points
             return mapper.Map<List<GetPointsResponse>>(points);
         }
         
-        public async Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<List<GetPointsBySessionIdResponse>> GetPointsBySessionIdAsync(GetPointsBySessionIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(query, cancellationToken);
             
@@ -61,12 +61,12 @@ namespace Target10._9.Business.Points
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
-            var point = await pointsRepository.GetPointByIdAsync(query.Id, userIdGuid, cancellationToken);
+            var points = await pointsRepository.GetPointsBySessionIdAsync(query.Id, userIdGuid, cancellationToken);
             
-            if (point == null)
+            if (points == null)
                 throw new KeyNotFoundException("Point not found.");
 
-            return mapper.Map<GetPointByIdResponse>(point);
+            return mapper.Map<List<GetPointsBySessionIdResponse>>(points);
         }
         
         #endregion
