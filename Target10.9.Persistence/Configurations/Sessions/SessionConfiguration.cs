@@ -11,5 +11,8 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
         builder.HasKey(x => x.Id);
         builder.HasOne(x => x.Users).WithMany(x => x.Sessions).HasForeignKey(x => x.UserId);
         builder.HasOne(x => x.SessionModes).WithMany(x => x.Sessions).HasForeignKey(x => x.SessionModeId);
+        builder.Property(x => x.Etat)
+            .HasConversion<string>()
+            .IsRequired();  
     }
 }

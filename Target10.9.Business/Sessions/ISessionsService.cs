@@ -124,6 +124,7 @@ namespace Target10._9.Business.Sessions
                 command.DateStart,
                 command.DateEnd,
                 command.SessionModeId,
+                command.Etat,
                 cancellationToken
             );
             
