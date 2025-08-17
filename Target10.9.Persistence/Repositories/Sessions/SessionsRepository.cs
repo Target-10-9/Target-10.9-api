@@ -67,6 +67,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
         DateTime dateStart,
         DateTime dateEnd,
         Guid sessionModeId,
+        SessionEtat etat,
         CancellationToken cancellationToken
     )
     {
@@ -80,6 +81,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
         session.DateStart = dateStart;
         session.DateEnd = dateEnd;
         session.SessionModeId = sessionModeId;
+        session.Etat = etat;
 
         dbContext.Sessions.Update(session);
         

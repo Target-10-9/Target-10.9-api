@@ -8,6 +8,7 @@ public class GetSessionByIdResponse
     public DateTime DateEnd { get; set; }
     public Guid UserId { get; set; }
     public SessionModeDto SessionModes { get; set; } = null!;
+    public SessionEtat Etat { get; set; }
 }
 
 public class SessionModeDto

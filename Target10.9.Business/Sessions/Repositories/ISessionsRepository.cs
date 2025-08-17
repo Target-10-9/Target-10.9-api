@@ -28,6 +28,7 @@ public interface ISessionsRepository
         DateTime dateStart,
         DateTime dateEnd,
         Guid sessionModeId,
+        SessionEtat etat,
         CancellationToken cancellationToken
     );
     #endregion
