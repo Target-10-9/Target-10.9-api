@@ -6,6 +6,7 @@ using Target10._9.Business.Points.Entities;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.Sessions.Entities;
+using Target10._9.Business.Targets.Entities;
 using Target10._9.Business.Users.Entities;
 using Target10._9.Business.WeaponDetails.Entities;
 
@@ -32,6 +33,8 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<SessionModeWeaponDetail> SessionModeWeaponDetails { get; set; }
     public virtual DbSet<WeaponDetail> WeaponDetails { get; set; }
     public virtual DbSet<Point> Points { get; set; }
+    
+    public virtual DbSet<Target> Targets { get; set; }
     
     #endregion DbSets
     
