@@ -9,6 +9,7 @@ using Target10._9.Business.Services;
 using Target10._9.Business.SessionModes;
 using Target10._9.Business.SessionModeWeaponDetails;
 using Target10._9.Business.Sessions;
+using Target10._9.Business.Targets;
 using Target10._9.Business.Users;
 using Target10._9.Business.WeaponDetails;
 
@@ -30,6 +31,7 @@ public static class DependencyInjection
             .AddModeDetailsDependencies()
             .AddSessionModeWeaponDetailsDependencies()
             .AddPointsDependencies()
+            .AddTargetsDependencies()
             .AddScoped<IValidationService, ValidationService>()
             .AddValidatorsFromAssembly(businessAssembly);
     }
