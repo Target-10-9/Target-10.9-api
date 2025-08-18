@@ -22,9 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Authentications\" />
-      <Folder Include="Targets\Commands\" />
-      <Folder Include="Targets\Queries\" />
-      <Folder Include="Targets\Responses\" />
     </ItemGroup>
 
 </Project>

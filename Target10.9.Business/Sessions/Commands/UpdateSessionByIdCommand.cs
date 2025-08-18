@@ -9,6 +9,8 @@ public class UpdateSessionByIdCommand
     public DateTime DateEnd { get; set; }
     public Guid SessionModeId { get; set; }
     public SessionEtat Etat { get; set; }
+    
+    public Guid TargetId { get; set; }
 }
 
 public class UpdateSessionByIdCommandValidator : AbstractValidator<UpdateSessionByIdCommand>
@@ -34,5 +36,10 @@ public class UpdateSessionByIdCommandValidator : AbstractValidator<UpdateSession
         RuleFor(x => x.Etat)
             .IsInEnum()
             .WithMessage("Etat must be a valid SessionEtat value");
+        
+        RuleFor(x => x.TargetId)
+            .NotEmpty()
+            .WithMessage("TargetId is required");
+            
     }
 }
