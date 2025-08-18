@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FluentValidation;
+using Target10._9.Business.Common.Exceptions;
 
 namespace Target10._9_api.Middlewares;
 
@@ -40,6 +41,18 @@ public class ExceptionHandlingMiddleware
         catch (UnauthorizedAccessException ex)
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            context.Response.ContentType = "application/json";
+
+            var response = new
+            {
+                message = ex.Message
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+        catch (BusinessRuleException ex)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Conflict;
             context.Response.ContentType = "application/json";
 
             var response = new

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Common.Exceptions;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Services;
 using Target10._9.Business.Sessions.Commands;
@@ -116,6 +117,15 @@ namespace Target10._9.Business.Sessions
             
             if (session == null)
                 throw new KeyNotFoundException("Session not found.");
+            
+            if (command.Etat == SessionEtat.InProgress)
+            {
+                var alreadyInProgress = await sessionsRepository
+                    .CheckIfSessionEtatInProgressExistAsync(userIdGuid, cancellationToken);
+
+                if (alreadyInProgress)
+                    throw new BusinessRuleException("You already have a session in progress.");
+            }
 
             await sessionsRepository.UpdateSessionByIdAsync(
                 id,

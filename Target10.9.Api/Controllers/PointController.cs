@@ -13,7 +13,7 @@ public class PointController(
     IPointsService pointsService
     ) : ControllerBase
 {
-    #region Get
+    #region GET
     
     [HttpGet]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -36,7 +36,7 @@ public class PointController(
     
     #endregion
     
-    #region Post
+    #region POST
     
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -49,7 +49,7 @@ public class PointController(
     
     #endregion
     
-    #region Delete
+    #region DELETE
     
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

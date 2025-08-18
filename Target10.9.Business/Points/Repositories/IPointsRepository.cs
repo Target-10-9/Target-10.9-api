@@ -1,4 +1,5 @@
 using Target10._9.Business.Points.Entities;
+using Target10._9.Business.Sessions.Entities;
 
 namespace Target10._9.Business.Points.Repositories;
 
@@ -13,7 +14,6 @@ public interface IPointsRepository
     Task<Point> AddPointAsync(
         float X_Coordinate,
         float Y_Coordinate,
-        DateTime dateTimePoint,
         Guid sessionId,
         CancellationToken cancellationToken
     );

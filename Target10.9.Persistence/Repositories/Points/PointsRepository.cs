@@ -31,7 +31,6 @@ public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepositor
     public async Task<Point> AddPointAsync(
         float X_Coordinate,
         float Y_Coordinate,
-        DateTime dateTimePoint,
         Guid sessionId,
         CancellationToken cancellationToken
     )
@@ -41,7 +40,7 @@ public class PointsRepository(ApplicationDbContext dbContext) : IPointsRepositor
             Id = Guid.NewGuid(),
             X_Coordinate = X_Coordinate,
             Y_Coordinate = Y_Coordinate,
-            DateTimePoint = dateTimePoint,
+            DateTimePoint = DateTime.UtcNow,
             SessionId = sessionId
         };
         

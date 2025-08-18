@@ -6,6 +6,7 @@ using Target10._9.Business.Points.Queries;
 using Target10._9.Business.Points.Repositories;
 using Target10._9.Business.Points.Responses;
 using Target10._9.Business.Services;
+using Target10._9.Business.Sessions.Repositories;
 
 namespace Target10._9.Business.Points
 {
@@ -33,6 +34,7 @@ namespace Target10._9.Business.Points
 
     public class PointsService(
         IPointsRepository pointsRepository,
+        ISessionsRepository sessionsRepository,
         IValidationService validationService,
         ILogsRepository logsRepository,
         IMapper mapper
@@ -81,12 +83,13 @@ namespace Target10._9.Business.Points
             
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var sessionInProgress = await sessionsRepository.GetSessionIdByEtatInProgressAsync(userIdGuid, cancellationToken);
 
             var pointResponse = await pointsRepository.AddPointAsync(
                 command.X_Coordinate,
                 command.Y_Coordinate,
-                command.DateTimePoint,
-                command.SessionId,
+                sessionInProgress!.Id,
                 cancellationToken
             );
             

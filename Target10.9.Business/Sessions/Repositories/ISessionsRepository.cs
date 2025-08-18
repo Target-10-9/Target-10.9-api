@@ -4,12 +4,14 @@ namespace Target10._9.Business.Sessions.Repositories;
 
 public interface ISessionsRepository
 {
-    #region Get
+    #region GET
     Task<List<Session>> GetSessionsAsync(Guid userId, CancellationToken cancellationToken);
     Task<Session?> GetSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken);
+    Task<bool> CheckIfSessionEtatInProgressExistAsync(Guid userId, CancellationToken cancellationToken);
+    Task<Session?> GetSessionIdByEtatInProgressAsync(Guid userId, CancellationToken cancellationToken);
     #endregion
     
-    #region Post
+    #region POST
     Task<Session> AddSessionAsync(
         Guid userId,
         string name,
@@ -20,7 +22,7 @@ public interface ISessionsRepository
     );
     #endregion
     
-    #region Put
+    #region PUT
     Task<Session?> UpdateSessionByIdAsync(
         Guid sessionId,
         Guid userId,
@@ -33,7 +35,7 @@ public interface ISessionsRepository
     );
     #endregion
     
-    #region Delete
+    #region DELETE
     Task DeleteSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken);
     #endregion
 }

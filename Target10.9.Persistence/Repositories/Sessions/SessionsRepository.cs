@@ -25,7 +25,19 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
                     .ThenInclude(smw => smw.WeaponDetails)
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
     }
+    
+    public async Task<bool> CheckIfSessionEtatInProgressExistAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Sessions
+            .AnyAsync(s => s.UserId == userId && s.Etat == SessionEtat.InProgress, cancellationToken);
+    }
 
+    public Task<Session?> GetSessionIdByEtatInProgressAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Sessions
+            .Where(s => s.UserId == userId && s.Etat == SessionEtat.InProgress)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
     #endregion
     
     #region POST
