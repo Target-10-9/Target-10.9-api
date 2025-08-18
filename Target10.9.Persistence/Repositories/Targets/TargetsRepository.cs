@@ -38,10 +38,10 @@ public class TargetsRepository (ApplicationDbContext dbContext) : ITargetsReposi
     
     #region DELETE
     
-    public async Task DeleteTargetUserAsync(Guid targetId, Guid userId, CancellationToken cancellationToken)
+    public async Task DeleteTargetUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         var target = await dbContext.Targets
-            .FirstOrDefaultAsync(t => t.TargetId == targetId && t.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(t => t.UserId == userId, cancellationToken);
         
         if (target != null)
         {

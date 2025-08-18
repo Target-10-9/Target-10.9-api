@@ -7,11 +7,12 @@ public interface ITargetsRepository
     #region CHECK
     Task<bool> CheckIfTargetUserExistAsync(Guid targetId, Guid userId, CancellationToken cancellationToken);
     #endregion
+    
     #region POST
     Task<Target> AddTargetUserAsync(Guid targetId, Guid userId, CancellationToken cancellationToken);
     #endregion
     
     #region DELETE
-    Task DeleteTargetUserAsync(Guid targetId, Guid userId, CancellationToken cancellationToken);
+    Task DeleteTargetUserAsync(Guid userId, CancellationToken cancellationToken);
     #endregion
 }

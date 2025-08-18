@@ -7,6 +7,7 @@ using Target10._9.Business.Sessions.Commands;
 using Target10._9.Business.Sessions.Queries;
 using Target10._9.Business.Sessions.Repositories;
 using Target10._9.Business.Sessions.Responses;
+using Target10._9.Business.TargetReferences.Repositories;
 using Target10._9.Business.Targets.Repositories;
 
 namespace Target10._9.Business.Sessions
@@ -34,6 +35,7 @@ namespace Target10._9.Business.Sessions
     public class SessionsService(
         ISessionsRepository sessionsRepository,
         ITargetsRepository targetsRepository,
+        ITargetReferencesRepository targetReferencesRepository,
         ILogsRepository logsRepository,
         IValidationService validationService,
         IMapper mapper
@@ -128,20 +130,29 @@ namespace Target10._9.Business.Sessions
 
                     if (alreadyInProgress)
                         throw new BusinessRuleException("You already have a session in progress.");
+                    
+                    if (!command.TargetId.HasValue)
+                        throw new BusinessRuleException("TargetId must be provided when starting a session.");
+                    
+                    var targetReferenceExist = await targetReferencesRepository
+                        .CheckIfTargetReferenceIdExistAsync(command.TargetId.Value, cancellationToken);
+                    
+                    if (!targetReferenceExist)
+                        throw new BusinessRuleException("TargetReferenceId provided does not exist.");
         
                     var targetUserAlreadyExist = await targetsRepository
-                        .CheckIfTargetUserExistAsync(command.TargetId, userIdGuid, cancellationToken);
+                        .CheckIfTargetUserExistAsync(command.TargetId.Value, userIdGuid, cancellationToken);
 
                     if (targetUserAlreadyExist)
                         throw new BusinessRuleException("Target user already exists in this session.");
 
                     await targetsRepository
-                        .AddTargetUserAsync(command.TargetId, userIdGuid, cancellationToken);
+                        .AddTargetUserAsync(command.TargetId.Value, userIdGuid, cancellationToken);
                     break;
 
                 case SessionEtat.Finished:
-                    await targetsRepository
-                        .DeleteTargetUserAsync(command.TargetId, userIdGuid, cancellationToken);
+                        await targetsRepository
+                            .DeleteTargetUserAsync(userIdGuid, cancellationToken);
                     break;
             }
 
