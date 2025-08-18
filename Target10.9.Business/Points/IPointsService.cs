@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Common.Exceptions;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Points.Commands;
 using Target10._9.Business.Points.Queries;
@@ -85,6 +86,9 @@ namespace Target10._9.Business.Points
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
             var sessionInProgress = await sessionsRepository.GetSessionIdByEtatInProgressAsync(userIdGuid, cancellationToken);
+            
+            if (sessionInProgress == null)
+                throw new BusinessRuleException("No session in progress found for the user.");
 
             var pointResponse = await pointsRepository.AddPointAsync(
                 command.X_Coordinate,
