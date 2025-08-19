@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Target10._9.Business.SessionModes.Entities;
 using Target10._9.Business.SessionModes.Repositories;
+using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.WeaponDetails.Entities;
 
 namespace Target10._9.Persistence.Repositories.SessionModes;
@@ -57,6 +58,22 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         return sessionMode;
     }
     
+    public async Task<SessionModeWeaponDetail> AddAuthorizedWeaponAsync(
+        Guid sessionModeId,
+        Guid weaponDetailId,
+        CancellationToken cancellationToken)
+    {
+        var entity = new SessionModeWeaponDetail
+        {
+            SessionModeId = sessionModeId,
+            WeaponDetailsId = weaponDetailId
+        };
+        dbContext.SessionModeWeaponDetails.Add(entity);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        return entity;
+    }
+    
     #endregion
     
     #region Put
@@ -103,6 +120,18 @@ public class SessionModesRepository(ApplicationDbContext dbContext) : ISessionMo
         dbContext.SessionModes.Remove(sessionMode);
         
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+    {
+        var entity = await dbContext.SessionModeWeaponDetails
+            .FirstOrDefaultAsync(x => x.SessionModeId == sessionModeId && x.WeaponDetailsId == weaponDetailsId, cancellationToken);
+
+        if (entity is not null)
+        {
+            dbContext.SessionModeWeaponDetails.Remove(entity);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
     
     #endregion

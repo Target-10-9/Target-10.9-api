@@ -6,6 +6,8 @@ using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
 using Target10._9.Business.SessionModes.Repositories;
 using Target10._9.Business.SessionModes.Responses;
+using Target10._9.Business.SessionModeWeaponDetails.Commands;
+using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.SessionModeWeaponDetails.Queries;
 using Target10._9.Business.SessionModeWeaponDetails.Responses;
 
@@ -21,6 +23,8 @@ namespace Target10._9.Business.SessionModes
         
         #region Post
         Task<AddSessionModeResponse> AddSessionModeAsync(AddSessionModeCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+        Task<AddAuthorizedWeaponResponse> AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command,
+            CancellationToken cancellationToken);
         #endregion
         
         #region Put
@@ -29,6 +33,9 @@ namespace Target10._9.Business.SessionModes
         
         #region Delete
         Task DeleteSessionModeByIdAsync(DeleteSessionModeByIdCommand command, ClaimsPrincipal currentUser, CancellationToken cancellationToken);
+
+        Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId,
+            CancellationToken cancellationToken);
         #endregion
     }
 
@@ -105,6 +112,17 @@ namespace Target10._9.Business.SessionModes
             return mapper.Map<AddSessionModeResponse>(sessionMode);
         }
         
+        public async Task<AddAuthorizedWeaponResponse> AddAuthorizedWeaponAsync(Guid sessionModeId, AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
+        {
+            var newWeapon = await sessionModesRepository.AddAuthorizedWeaponAsync(
+                sessionModeId,
+                command.WeaponDetailId,
+                cancellationToken
+            );
+            
+            return mapper.Map<AddAuthorizedWeaponResponse>(newWeapon);
+        }
+        
         #endregion
         
         #region Put
@@ -159,6 +177,11 @@ namespace Target10._9.Business.SessionModes
                 userIdGuid,
                 cancellationToken
             );
+        }
+        
+        public async Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+        {
+            await sessionModesRepository.RemoveAuthorizedWeaponAsync(sessionModeId, weaponDetailsId, cancellationToken);
         }
         
         #endregion

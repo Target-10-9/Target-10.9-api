@@ -3,12 +3,12 @@ using Target10._9.Business.Sessions.Queries;
 
 namespace Target10._9.Business.Points.Queries;
 
-public class GetPointByIdQuery
+public class GetPointsBySessionIdQuery
 {
     public Guid Id { get; set; } 
 }
 
-public class GetPointByIdQueryValidator : AbstractValidator<GetPointByIdQuery>
+public class GetPointByIdQueryValidator : AbstractValidator<GetPointsBySessionIdQuery>
 {
     public GetPointByIdQueryValidator()
     {

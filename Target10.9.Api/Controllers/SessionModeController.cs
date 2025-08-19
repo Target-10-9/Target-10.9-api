@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Target10._9.Business.SessionModes;
 using Target10._9.Business.SessionModes.Commands;
 using Target10._9.Business.SessionModes.Queries;
+using Target10._9.Business.SessionModeWeaponDetails.Commands;
 using Target10._9.Business.SessionModeWeaponDetails.Queries;
 
 namespace Target10._9_api.Controllers;
@@ -59,6 +60,16 @@ public class SessionModeController(
         return Ok(result);
     }
     
+    [HttpPost("{sessionModeId:guid}/weapons")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddAuthorizedWeapon(Guid sessionModeId, [FromBody] AddAuthorizedWeaponCommand command, CancellationToken cancellationToken)
+    {
+        var newWeapon = await sessionModesService.AddAuthorizedWeaponAsync(sessionModeId, command, cancellationToken);
+        return Ok(newWeapon);
+    }
+
+    
     #endregion
     
     #region Put
@@ -83,6 +94,14 @@ public class SessionModeController(
     {
         var command = new DeleteSessionModeByIdCommand { Id = id };
         await sessionModesService.DeleteSessionModeByIdAsync(command, User, cancellationToken);
+        return NoContent();
+    }
+    
+    [HttpDelete("{sessionModeId:guid}/weapons/{weaponDetailsId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveAuthorizedWeapon(Guid sessionModeId, Guid weaponDetailsId, CancellationToken cancellationToken)
+    {
+        await sessionModesService.RemoveAuthorizedWeaponAsync(sessionModeId, weaponDetailsId, cancellationToken);
         return NoContent();
     }
     

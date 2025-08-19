@@ -18,9 +18,26 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
     public Task<Session?> GetSessionByIdAsync(Guid sessionId, Guid userId, CancellationToken cancellationToken)
     {
         return dbContext.Sessions
+            .Include(s => s.SessionModes)
+                .ThenInclude(sm => sm.ModeDetails)
+            .Include(s => s.SessionModes)
+                .ThenInclude(sm => sm.SessionModeWeaponDetails)
+                    .ThenInclude(smw => smw.WeaponDetails)
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId, cancellationToken);
     }
+    
+    public async Task<bool> CheckIfSessionEtatInProgressExistAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Sessions
+            .AnyAsync(s => s.UserId == userId && s.Etat == SessionEtat.InProgress, cancellationToken);
+    }
 
+    public Task<Session?> GetSessionIdByEtatInProgressAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return dbContext.Sessions
+            .Where(s => s.UserId == userId && s.Etat == SessionEtat.InProgress)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
     #endregion
     
     #region POST
@@ -62,6 +79,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
         DateTime dateStart,
         DateTime dateEnd,
         Guid sessionModeId,
+        SessionEtat etat,
         CancellationToken cancellationToken
     )
     {
@@ -75,6 +93,7 @@ public class SessionsRepository(ApplicationDbContext dbContext) : ISessionsRepos
         session.DateStart = dateStart;
         session.DateEnd = dateEnd;
         session.SessionModeId = sessionModeId;
+        session.Etat = etat;
 
         dbContext.Sessions.Update(session);
         

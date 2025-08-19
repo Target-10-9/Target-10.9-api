@@ -1,4 +1,5 @@
 using Target10._9.Business.SessionModes.Entities;
+using Target10._9.Business.SessionModeWeaponDetails.Entities;
 using Target10._9.Business.WeaponDetails.Entities;
 
 namespace Target10._9.Business.SessionModes.Repositories;
@@ -22,6 +23,12 @@ public interface ISessionModesRepository
         Guid modeDetailId,
         CancellationToken cancellationToken
     );
+
+    Task<SessionModeWeaponDetail> AddAuthorizedWeaponAsync(
+        Guid sessionModeId, 
+        Guid weaponDetailId,
+        CancellationToken cancellationToken
+    );
     #endregion
     
     #region Put
@@ -38,5 +45,9 @@ public interface ISessionModesRepository
     
     #region Delete
     Task DeleteSessionModeByIdAsync(Guid id, CancellationToken cancellationToken);
+
+    Task RemoveAuthorizedWeaponAsync(Guid sessionModeId, Guid weaponDetailsId,
+        CancellationToken cancellationToken);
+
     #endregion
 }

@@ -1,6 +1,6 @@
 namespace Target10._9.Business.Points.Responses;
 
-public class GetPointByIdResponse
+public class GetPointsBySessionIdResponse
 {
     public Guid Id { get; set; }
     public float X_Coordinate { get; set; }

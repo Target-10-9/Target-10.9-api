@@ -13,30 +13,30 @@ public class PointController(
     IPointsService pointsService
     ) : ControllerBase
 {
-    #region Get
+    #region GET
     
     [HttpGet]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSessions(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPoints(CancellationToken cancellationToken)
     {
-        var sessions = await pointsService.GetPointsAsync(User, cancellationToken);
-        return Ok(sessions);
+        var points = await pointsService.GetPointsAsync(User, cancellationToken);
+        return Ok(points);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{sessionId}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSessionbyId(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPointsBySessionId(Guid sessionId, CancellationToken cancellationToken)
     {
-        var query = new GetPointByIdQuery { Id = id };
-        var sessions = await pointsService.GetPointByIdAsync(query, User, cancellationToken);
-        return Ok(sessions);
+        var query = new GetPointsBySessionIdQuery { Id = sessionId };
+        var points = await pointsService.GetPointsBySessionIdAsync(query, User, cancellationToken);
+        return Ok(points);
     }
     
     #endregion
     
-    #region Post
+    #region POST
     
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -49,7 +49,7 @@ public class PointController(
     
     #endregion
     
-    #region Delete
+    #region DELETE
     
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

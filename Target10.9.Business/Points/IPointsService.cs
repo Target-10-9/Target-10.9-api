@@ -1,11 +1,13 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
+using Target10._9.Business.Common.Exceptions;
 using Target10._9.Business.Logs.Repositories;
 using Target10._9.Business.Points.Commands;
 using Target10._9.Business.Points.Queries;
 using Target10._9.Business.Points.Repositories;
 using Target10._9.Business.Points.Responses;
 using Target10._9.Business.Services;
+using Target10._9.Business.Sessions.Repositories;
 
 namespace Target10._9.Business.Points
 {
@@ -14,7 +16,7 @@ namespace Target10._9.Business.Points
         #region GET
         Task<List<GetPointsResponse>> GetPointsAsync(ClaimsPrincipal user, CancellationToken cancellationToken);
 
-        Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser,
+        Task<List<GetPointsBySessionIdResponse>> GetPointsBySessionIdAsync(GetPointsBySessionIdQuery query, ClaimsPrincipal currentUser,
             CancellationToken cancellationToken);
         #endregion
         
@@ -33,6 +35,7 @@ namespace Target10._9.Business.Points
 
     public class PointsService(
         IPointsRepository pointsRepository,
+        ISessionsRepository sessionsRepository,
         IValidationService validationService,
         ILogsRepository logsRepository,
         IMapper mapper
@@ -52,7 +55,7 @@ namespace Target10._9.Business.Points
             return mapper.Map<List<GetPointsResponse>>(points);
         }
         
-        public async Task<GetPointByIdResponse> GetPointByIdAsync(GetPointByIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
+        public async Task<List<GetPointsBySessionIdResponse>> GetPointsBySessionIdAsync(GetPointsBySessionIdQuery query, ClaimsPrincipal currentUser, CancellationToken cancellationToken)
         {
             await validationService.ValidateAsync(query, cancellationToken);
             
@@ -61,12 +64,12 @@ namespace Target10._9.Business.Points
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
             
-            var point = await pointsRepository.GetPointByIdAsync(query.Id, userIdGuid, cancellationToken);
+            var points = await pointsRepository.GetPointsBySessionIdAsync(query.Id, userIdGuid, cancellationToken);
             
-            if (point == null)
+            if (points == null)
                 throw new KeyNotFoundException("Point not found.");
 
-            return mapper.Map<GetPointByIdResponse>(point);
+            return mapper.Map<List<GetPointsBySessionIdResponse>>(points);
         }
         
         #endregion
@@ -81,12 +84,16 @@ namespace Target10._9.Business.Points
             
             if (!Guid.TryParse(userId, out var userIdGuid))
                 throw new UnauthorizedAccessException("Invalid user identifier.");
+            
+            var sessionInProgress = await sessionsRepository.GetSessionIdByEtatInProgressAsync(userIdGuid, cancellationToken);
+            
+            if (sessionInProgress == null)
+                throw new BusinessRuleException("No session in progress found for the user.");
 
             var pointResponse = await pointsRepository.AddPointAsync(
                 command.X_Coordinate,
                 command.Y_Coordinate,
-                command.DateTimePoint,
-                command.SessionId,
+                sessionInProgress!.Id,
                 cancellationToken
             );
             

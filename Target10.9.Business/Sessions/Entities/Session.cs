@@ -12,6 +12,7 @@ public class Session
     public DateTime DateEnd { get; set; }
     public Guid UserId { get; set; }
     public Guid SessionModeId { get; set; }
+    public SessionEtat Etat { get; set; } = SessionEtat.OnPending;
     
     public User Users { get; set; } = null!;
     public SessionMode SessionModes { get; set; } = null!;
