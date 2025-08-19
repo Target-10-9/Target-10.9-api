@@ -125,6 +125,12 @@ namespace Target10._9.Business.Sessions
             switch (command.Etat)
             {
                 case SessionEtat.InProgress:
+                    var targetReferenceExist = await targetReferencesRepository
+                        .CheckIfTargetReferenceIdExistAsync(command.TargetId.Value, cancellationToken);
+                    
+                    if (!targetReferenceExist)
+                        throw new BusinessRuleException("TargetReferenceId provided does not exist.");
+                    
                     var alreadyInProgress = await sessionsRepository
                         .CheckIfSessionEtatInProgressExistAsync(userIdGuid, cancellationToken);
 
@@ -133,12 +139,6 @@ namespace Target10._9.Business.Sessions
                     
                     if (!command.TargetId.HasValue)
                         throw new BusinessRuleException("TargetId must be provided when starting a session.");
-                    
-                    var targetReferenceExist = await targetReferencesRepository
-                        .CheckIfTargetReferenceIdExistAsync(command.TargetId.Value, cancellationToken);
-                    
-                    if (!targetReferenceExist)
-                        throw new BusinessRuleException("TargetReferenceId provided does not exist.");
         
                     var targetUserAlreadyExist = await targetsRepository
                         .CheckIfTargetUserExistAsync(command.TargetId.Value, userIdGuid, cancellationToken);
