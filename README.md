@@ -25,7 +25,8 @@ Pour mettre à jour l'API
 
 ### POUR FABIEN !!!
 ```bash
-  ssh -i "TargetKeyGen1.pem" ec2-user@ec2-13-38-34-156.eu-west-3.compute.amazonaws.com
+  cd .\.ssh\
+  ssh -i "TargetKeyGen1.pem" ec2-user@ec2-15-237-25-38.eu-west-3.compute.amazonaws.com
 ```
 
 ### dans le Power Shell de EC2 
@@ -40,7 +41,7 @@ pour litser les tables
     \dt
 ```
 
-se connecter a l'API héberger sur EC2 : http://13.38.34.156:5000/swagger => a chaque terraform apply l'ip change 
+se connecter a l'API héberger sur EC2 : http://15.237.25.38:5000/swagger => a chaque terraform apply l'ip change 
 
 Lien du site  : http://localhost/login <br>
 Lien du swagger : http://localhost:5000/swagger/index.html
