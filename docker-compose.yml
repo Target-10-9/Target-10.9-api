@@ -34,8 +34,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - Jwt__Key=MaSuperCleSecreteUltraLongue1234567890
       - Jwt__Issuer=http://localhost
-      - ASPNETCORE_URLS=http://+:5000
-      - ASPNETCORE_HTTPS_PORT=5000
+      - ASPNETCORE_URLS=http://+:5203
+      - ASPNETCORE_HTTPS_PORT=5203
       - Jwt__Audience=http://localhost
 
       - POSTGRES_USER=target_user
@@ -43,7 +43,7 @@ services:
 
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=target_db;Username=target_user;Password=target_password
     ports:
-      - "5000:5000"
+      - "5203:5203"
     volumes:
       - dataprotectionkeys:/root/.aspnet/DataProtection-Keys
     networks:
