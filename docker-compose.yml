@@ -19,62 +19,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 10s
       timeout: 5s
-      retries: 5
-  
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    container_name: target10_api
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - Jwt__Key=MaSuperCleSecreteUltraLongue1234567890
-      - Jwt__Issuer=http://localhost
-      - ASPNETCORE_URLS=http://+:5203
-      - ASPNETCORE_HTTPS_PORT=5203
-      - Jwt__Audience=http://localhost
-
-      - POSTGRES_USER=target_user
-      - POSTGRES_PASSWORD=target_password
-
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=target_db;Username=target_user;Password=target_password
-    ports:
-      - "5203:5203"
-    volumes:
-      - dataprotectionkeys:/root/.aspnet/DataProtection-Keys
-    networks:
-      - target10net
-  
-  
-  migrations:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
-    container_name: target10_migrations
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./:/src
-    working_dir: /src/Target10.9.Api
-    entrypoint: >
-      sh -c "
-        dotnet tool install --global dotnet-ef --version 9.* &&
-        export PATH=\"$PATH:/root/.dotnet/tools\" &&
-        dotnet ef database update \
-          --project /src/Target10.9.Persistence/Target10.9.Persistence.csproj \
-          --startup-project /src/Target10.9.Api/Target10.9.Api.csproj
-      "
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=target_db;Username=target_user;Password=target_password
-    networks:
-      - target10net
-  
-  
-  
-  
+      retries: 5 
   
   nginx:
     image: nginx:stable-alpine
@@ -88,8 +33,6 @@ services:
       #- J:/Project/Target-10.9-web/dist:/usr/share/nginx/html:ro
       # Votre conf Nginx (à créer à côté du compose)
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - api
     networks:
       - target10net
 

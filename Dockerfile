@@ -1,41 +1,31 @@
-# === Étape 1 : build de la solution ===
+# ===== Étape Build =====
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# 1) Copier la solution et les csproj pour un restore intelligent
-COPY Target10.9-api.sln                          ./
-COPY Target10.9.Business/Target10.9.Business.csproj    Target10.9.Business/
-COPY Target10.9.Persistence/Target10.9.Persistence.csproj Target10.9.Persistence/
-COPY Target10.9.Api/Target10.9.Api.csproj          Target10.9.Api/
+# Copier la solution + csproj (les 4 projets)
+COPY Target10.9-api.sln                                              ./
+COPY Target10.9.Api/Target10.9.Api.csproj                             Target10.9.Api/
+COPY Target10.9.Business/Target10.9.Business.csproj                   Target10.9.Business/
+COPY Target10.9.Persistence/Target10.9.Persistence.csproj             Target10.9.Persistence/
+COPY Target10.9.Migrator/Target10.9.Migrator.csproj                   Target10.9.Migrator/
+
 RUN dotnet restore "Target10.9-api.sln"
 
-# 2) Copier tout le code et publier l’API (inclut Persistence & Business)
+# Copier tout le code
 COPY . .
-WORKDIR "/src/Target10.9.Api"
-RUN dotnet publish -c Release -o /app/publish
 
-# === Étape 2 : image runtime allégée ===
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
+# Publier l'API et le Migrator (Release)
+RUN dotnet publish Target10.9.Api/Target10.9.Api.csproj -c Release -o /out/api
+RUN dotnet publish Target10.9.Migrator/Target10.9.Migrator.csproj -c Release -o /out/migrator
 
-# 1) Copier l’artefact publié
-COPY --from=build /app/publish .
+# ===== Image Runtime Lambda .NET 8 =====
+FROM public.ecr.aws/lambda/dotnet:8
 
-# Installer postgresql-client pour pg_isready
-RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+# Déposer les artefacts au LAMBDA_TASK_ROOT
+COPY --from=build /out/api/      ${LAMBDA_TASK_ROOT}/
+COPY --from=build /out/migrator/ ${LAMBDA_TASK_ROOT}/
 
-# 2) Créer un user non-root (optionnel mais recommandé)
-RUN addgroup --system appgroup \
- && adduser  --system --ingroup appgroup appuser
-USER appuser
-
-# 3) Entrypoint : attendre la BDD puis démarrer l’API
-#    On utilise 'postgres' comme hostname tel que défini dans docker-compose.yml
-ENTRYPOINT ["sh", "-c", "\
-  echo '⏳ Waiting for PostgreSQL at postgres:5432…' && \
-  until pg_isready -h postgres -U \"$${POSTGRES_USER}\"; do \
-    sleep 2; \
-  done && \
-  echo '✅ PostgreSQL is up — launching API' && \
-  exec dotnet Target10.9.Api.dll \
-"]
+# Par défaut, l’image lance l'API ASP.NET Core dans Lambda
+# (grâce à Amazon.Lambda.AspNetCoreServer.Hosting dans Program.cs)
+# Pour .NET 8, le "handler" de type image peut être simplement l'assembly.
+CMD ["Target10.9.Api"]

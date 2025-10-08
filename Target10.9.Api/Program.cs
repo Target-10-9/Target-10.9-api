@@ -1,4 +1,5 @@
 using System.Text;
+using Amazon.Lambda.AspNetCoreServer.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +10,8 @@ using Target10._9.Business;
 using Target10._9.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 
 var key = builder.Configuration["Jwt:Key"];
 
@@ -56,34 +59,43 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+var conn = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+builder.Services.AddDbContext<ApplicationDbContext>(opt =>
+{
+    // Si tes migrations sont dans Infrastructure :
+    opt.UseNpgsql(conn, x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+    //opt.UseNpgsql(conn);
+});
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerOptions();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddPersistenceDependencies(builder.Configuration);
 builder.Services.AddBusinessDependencies();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var cfg    = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-    var cs     = cfg.GetConnectionString("DefaultConnection");
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    logger.LogInformation("▶️ Tentative de migration sur « {CS} »", cs);
-    try
-    {
-        db.Database.Migrate();
-        logger.LogInformation("✅ Migration réussie.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "❌ Migration échouée !");
-        throw;
-    }
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+//     var cfg    = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+//     var cs     = cfg.GetConnectionString("DefaultConnection");
+//     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//     
+//     logger.LogInformation("▶️ Tentative de migration sur « {CS} »", cs);
+//     try
+//     {
+//         db.Database.Migrate();
+//         logger.LogInformation("✅ Migration réussie.");
+//     }
+//     catch (Exception ex)
+//     {
+//         logger.LogError(ex, "❌ Migration échouée !");
+//         throw;
+//     }
+// }
 
 
 
@@ -95,7 +107,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Target10.9 API v1");
+        c.SwaggerEndpoint("dev/swagger/v1/swagger.json", "Target10.9 API v1");
         c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
     });
 }
