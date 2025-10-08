@@ -2,9 +2,6 @@ name: Deploy Lambda from Docker Image
 
 on:
   push:
-    paths:
-      - 'Target-10.9-api/**'
-      - '.github/workflows/AWS-Terra.yml'
     branches:
       - develop
 
