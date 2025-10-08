@@ -102,16 +102,17 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("dev/swagger/v1/swagger.json", "Target10.9 API v1");
-        c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
-    });
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     
+// }
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("dev/swagger/v1/swagger.json", "Target10.9 API v1");
+    c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
+});
 
 if (app.Environment.IsProduction())
 {
