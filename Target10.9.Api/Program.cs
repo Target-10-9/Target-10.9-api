@@ -112,32 +112,23 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseSwagger(c =>
 {
-    // Si Lambda, on doit dire à Swagger de "préfixer" ses routes
-    var basePath = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null
-        ? "/dev"
-        : string.Empty;
-
-    // Ceci fait que le swagger.json sera correctement servi sous /dev/swagger/v1/swagger.json
-    c.PreSerializeFilters.Add((swagger, httpReq) =>
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
     {
-        var serverUrl = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}";
-        swagger.Servers = new List<OpenApiServer> { new OpenApiServer { Url = serverUrl } };
+        var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
+        swaggerDoc.Servers = new List<OpenApiServer>
+        {
+            new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{stage}" }
+        };
     });
-
-
 });
 
 app.UseSwaggerUI(c =>
 {
-    // Ici tu donnes l'URL complète du Swagger JSON sur API Gateway
-    var awsStage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
-    var swaggerUrl = awsStage
-        ? "https://6vus3nwkx9.execute-api.eu-west-3.amazonaws.com/dev/swagger/v1/swagger.json"
-        : "/swagger/v1/swagger.json";
-
-    c.SwaggerEndpoint(swaggerUrl, "Target10.9 API v1");
+    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
+    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
     c.RoutePrefix = "swagger";
 });
+
 
 
 
