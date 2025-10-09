@@ -109,7 +109,23 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 //     
 // }
 
-app.UseSwagger();
+app.UseSwagger(c =>
+{
+    // Si Lambda, on doit dire à Swagger de "préfixer" ses routes
+    var basePath = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null
+        ? "/dev"
+        : string.Empty;
+
+    // Important pour que Swagger génère le bon chemin interne
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    {
+        swaggerDoc.Servers = new List<Microsoft.OpenApi.Models.OpenApiServer>
+        {
+            new Microsoft.OpenApi.Models.OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}" }
+        };
+    });
+});
+
 app.UseSwaggerUI(c =>
 {
     var basePath = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null
@@ -117,9 +133,9 @@ app.UseSwaggerUI(c =>
         : string.Empty;
 
     c.SwaggerEndpoint($"{basePath}/swagger/v1/swagger.json", "Target10.9 API v1");
-    c.RoutePrefix = "swagger"; // /swagger/index.html
-
+    c.RoutePrefix = "swagger";
 });
+
 
 
 
