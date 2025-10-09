@@ -110,7 +110,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("dev/swagger/v1/swagger.json", "Target10.9 API v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Target10.9 API v1");
     c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
 });
 
