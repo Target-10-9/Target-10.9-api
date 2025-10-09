@@ -3,6 +3,8 @@ using Amazon.Lambda.AspNetCoreServer.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Target10._9_api;
 using Target10._9_api.Configurations;
 using Target10._9_api.Middlewares;
@@ -67,7 +69,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     //opt.UseNpgsql(conn);
 });
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerOptions();
 builder.Services.AddSwaggerGen();
@@ -110,9 +112,19 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("./v1/swagger.json", "Target10.9 API v1");
+    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
+
+    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
+
     c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
 });
+
+app.MapGet("/swagger/v1/swagger.json", (ISwaggerProvider sp) =>
+{
+    var swagger = sp.GetSwagger("v1");
+    return Results.Json(swagger);
+});
+
 
 if (app.Environment.IsProduction())
 {
@@ -126,4 +138,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", () => Results.Ok("Target10.9 API is running"));
+
 app.Run();
