@@ -3,6 +3,7 @@ using Amazon.Lambda.AspNetCoreServer.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Target10._9_api;
@@ -116,14 +117,14 @@ app.UseSwagger(c =>
         ? "/dev"
         : string.Empty;
 
-    // Important pour que Swagger génère le bon chemin interne
-    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    // Ceci fait que le swagger.json sera correctement servi sous /dev/swagger/v1/swagger.json
+    c.PreSerializeFilters.Add((swagger, httpReq) =>
     {
-        swaggerDoc.Servers = new List<Microsoft.OpenApi.Models.OpenApiServer>
-        {
-            new Microsoft.OpenApi.Models.OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}" }
-        };
+        var serverUrl = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}";
+        swagger.Servers = new List<OpenApiServer> { new OpenApiServer { Url = serverUrl } };
     });
+
+
 });
 
 app.UseSwaggerUI(c =>
