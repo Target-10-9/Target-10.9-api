@@ -129,13 +129,13 @@ app.UseSwagger(c =>
 
 app.UseSwaggerUI(c =>
 {
-    // Si on est sur Lambda, ajouter le stage /dev
-    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
+    // Ici tu donnes l'URL complète du Swagger JSON sur API Gateway
+    var awsStage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
+    var swaggerUrl = awsStage
+        ? "https://6vus3nwkx9.execute-api.eu-west-3.amazonaws.com/dev/swagger/v1/swagger.json"
+        : "/swagger/v1/swagger.json";
 
-    // SwaggerEndpoint doit inclure le stage
-    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
-
-    // RoutePrefix pour accéder à /swagger/index.html
+    c.SwaggerEndpoint(swaggerUrl, "Target10.9 API v1");
     c.RoutePrefix = "swagger";
 });
 
