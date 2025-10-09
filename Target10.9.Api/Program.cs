@@ -112,18 +112,16 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
+    var basePath = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null
+        ? "/dev"
+        : string.Empty;
 
-    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
+    c.SwaggerEndpoint($"{basePath}/swagger/v1/swagger.json", "Target10.9 API v1");
+    c.RoutePrefix = "swagger"; // /swagger/index.html
 
-    c.RoutePrefix = "swagger";  // URL finale : /swagger/index.html
 });
 
-app.MapGet("/swagger/v1/swagger.json", (ISwaggerProvider sp) =>
-{
-    var swagger = sp.GetSwagger("v1");
-    return Results.Json(swagger);
-});
+
 
 
 if (app.Environment.IsProduction())
