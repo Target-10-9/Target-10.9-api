@@ -129,13 +129,16 @@ app.UseSwagger(c =>
 
 app.UseSwaggerUI(c =>
 {
-    var basePath = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null
-        ? "/dev"
-        : string.Empty;
+    // Si on est sur Lambda, ajouter le stage /dev
+    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
 
-    c.SwaggerEndpoint($"{basePath}/swagger/v1/swagger.json", "Target10.9 API v1");
+    // SwaggerEndpoint doit inclure le stage
+    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
+
+    // RoutePrefix pour accéder à /swagger/index.html
     c.RoutePrefix = "swagger";
 });
+
 
 
 
