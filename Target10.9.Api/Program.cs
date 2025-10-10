@@ -122,17 +122,27 @@ app.UseSwagger(c =>
     });
 });
 
+// ⚠️ Correction ici :
 app.UseSwaggerUI(c =>
 {
-    var stage = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null ? "/dev" : "";
-    c.SwaggerEndpoint($"{stage}/swagger/v1/swagger.json", "Target10.9 API v1");
-    c.RoutePrefix = "swagger";
+    // Détection du stage
+    var isLambda = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
+    var stage = isLambda ? "/dev" : "";
+
+    // 🔧 Utiliser une URL absolue au lieu d’un chemin relatif
+    var swaggerJsonBase = isLambda
+        ? $"https://6vus3nwkx9.execute-api.eu-west-3.amazonaws.com{stage}/swagger/v1/swagger.json"
+        : $"{stage}/swagger/v1/swagger.json";
+
+    c.SwaggerEndpoint(swaggerJsonBase, "Target10.9 API v1");
+    c.RoutePrefix = "swagger"; // /swagger/index.html
 });
 
-
-
-
-
+app.MapGet("/env", () =>
+{
+    var name = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") ?? "(null)";
+    return Results.Ok(new { AWS_LAMBDA_FUNCTION_NAME = name });
+});
 
 
 if (app.Environment.IsProduction())
