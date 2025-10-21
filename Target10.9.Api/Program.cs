@@ -14,7 +14,14 @@ using Target10._9.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+ bool runningOnLambda = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME"));
+
+ if (runningOnLambda)
+ {
+     builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+ }
+
+
 
 var key = builder.Configuration["Jwt:Key"];
 
@@ -125,24 +132,21 @@ app.UseSwagger(c =>
 // ⚠️ Correction ici :
 app.UseSwaggerUI(c =>
 {
-    // Détection du stage
-    var isLambda = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
-    var stage = isLambda ? "/dev" : "";
-
-    // 🔧 Utiliser une URL absolue au lieu d’un chemin relatif
-    var swaggerJsonBase = isLambda
-        ? $"https://6vus3nwkx9.execute-api.eu-west-3.amazonaws.com{stage}/swagger/v1/swagger.json"
-        : $"{stage}/swagger/v1/swagger.json";
-
-    c.SwaggerEndpoint(swaggerJsonBase, "Target10.9 API v1");
-    c.RoutePrefix = "swagger"; // /swagger/index.html
+    // Récupère dynamiquement le stage depuis la requête (plus fiable que les variables d'environnement)
+    c.RoutePrefix = "swagger";
+    c.SwaggerEndpoint("/dev/swagger/v1/swagger.json", "Target10.9 API v1");
 });
 
 app.MapGet("/env", () =>
 {
-    var name = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") ?? "(null)";
-    return Results.Ok(new { AWS_LAMBDA_FUNCTION_NAME = name });
+    var isLambda = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
+    return Results.Ok(new
+    {
+        RunningOnLambda = isLambda,
+        AWS_LAMBDA_FUNCTION_NAME = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME")
+    });
 });
+
 
 
 if (app.Environment.IsProduction())
