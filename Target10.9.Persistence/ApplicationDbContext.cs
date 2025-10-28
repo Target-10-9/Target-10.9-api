@@ -24,6 +24,11 @@ public class ApplicationDbContext : DbContext
         _config = config;
     }
     
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+    
     #region DbSets
     
     public virtual DbSet<User> Users { get; set; }
