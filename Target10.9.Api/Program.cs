@@ -69,13 +69,22 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+
+
 var conn = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     // Si tes migrations sont dans Infrastructure :
     opt.UseNpgsql(conn, x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+    opt.UseNpgsql(conn)
+        .EnableSensitiveDataLogging()
+        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    
     //opt.UseNpgsql(conn);
 });
+
+
+
 
 //builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -86,6 +95,16 @@ builder.Services.AddPersistenceDependencies(builder.Configuration);
 builder.Services.AddBusinessDependencies();
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (!db.Database.CanConnect())
+    {
+        throw new Exception("❌ Impossible de se connecter à la base de données !");
+    }
+}
 
 // using (var scope = app.Services.CreateScope())
 // {

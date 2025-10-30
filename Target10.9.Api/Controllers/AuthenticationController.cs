@@ -24,7 +24,7 @@ namespace Target10._9_api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new { message = "This email is already in use" });
+                return Conflict(new { message = "This email is already in use ::::::" + ex.Message });
             }
             catch (ArgumentException ex)
             {
