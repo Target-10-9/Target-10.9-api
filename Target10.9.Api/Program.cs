@@ -156,15 +156,15 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/dev/swagger/v1/swagger.json", "Target10.9 API v1");
 });
 
-app.MapGet("/env", () =>
-{
-    var isLambda = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
-    return Results.Ok(new
-    {
-        RunningOnLambda = isLambda,
-        AWS_LAMBDA_FUNCTION_NAME = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME")
-    });
-});
+// app.MapGet("/env", () =>
+// {
+//     var isLambda = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME") != null;
+//     return Results.Ok(new
+//     {
+//         RunningOnLambda = isLambda,
+//         AWS_LAMBDA_FUNCTION_NAME = Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME")
+//     });
+// });
 
 
 
