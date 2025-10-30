@@ -42,6 +42,7 @@ jobs:
       
       - name: Update Lambda function to use new image
         run: |
+          echo "Updating Lambda function $LAMBDA_FUNCTION_NAME with image $IMAGE_URI..."
           aws lambda update-function-code \
             --function-name $LAMBDA_FUNCTION_NAME \
             --image-uri $IMAGE_URI
