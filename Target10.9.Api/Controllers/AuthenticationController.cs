@@ -24,7 +24,7 @@ namespace Target10._9_api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new { message = "Ce mail est déja utilisée  ::::::" + ex.Message });
+                return Conflict(new { message = "Ce mail est déja utilisée alors c'est mieux la hein ::::::" + ex.Message });
             }
             catch (ArgumentException ex)
             {
