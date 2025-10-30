@@ -11,7 +11,7 @@ namespace Target10._9_api.Controllers
         IAuthenticationsService authenticationsService
     ) : ControllerBase
     {
-        [HttpPost("register")]
+        [HttpPost("register23")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
