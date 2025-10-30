@@ -46,3 +46,12 @@ jobs:
           aws lambda update-function-code \
             --function-name $LAMBDA_FUNCTION_NAME \
             --image-uri $IMAGE_URI
+          
+      - name: Update Lambda alias 'dev' to point to $LATEST
+        run: |
+          echo "Updating alias 'dev' to point to $LATEST..."
+          LATEST_VERSION=$(aws lambda publish-version --function-name $LAMBDA_FUNCTION_NAME --query 'Version' --output text)
+          aws lambda update-alias \
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --name dev \
+            --function-version $LATEST_VERSION
