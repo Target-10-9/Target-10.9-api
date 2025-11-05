@@ -53,7 +53,7 @@ jobs:
       - name: Trigger migrator Lambda
         run: | 
           aws lambda invoke \
-            --function-name target109-migrator-dev \
+            --function-name target109-api-migrator-dev \
             --payload '{}' \
             --cli-binary-format raw-in-base64-out \
             response.json
