@@ -16,9 +16,7 @@ namespace Target10._9.Persistence;
 public class ApplicationDbContext : DbContext
 {
     private readonly IDbConfiguration _config = null!;
-
-    public ApplicationDbContext() { }
-
+    
     public ApplicationDbContext(IDbConfiguration config)
     {
         _config = config;
