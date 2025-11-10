@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Target10._9_api;
@@ -13,6 +14,10 @@ using Target10._9.Business;
 using Target10._9.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+ 
+// Logger global pour debug
+var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+var logger = loggerFactory.CreateLogger("DB_DEBUG");
 
  bool runningOnLambda = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AWS_LAMBDA_FUNCTION_NAME"));
 
@@ -72,6 +77,22 @@ builder.Services.AddControllers()
 
 
 var conn = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+logger.LogInformation("▶️ DB_CONNECTION_STRING utilisée : {Conn}", conn);
+
+try
+{
+    logger.LogInformation("🔹 Tentative de connexion brute Npgsql...");
+    using var testConn = new NpgsqlConnection(conn);
+    testConn.Open();
+    logger.LogInformation("✅ Connexion Npgsql brute réussie !");
+    testConn.Close();
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "❌ Échec de la connexion Npgsql brute ! Détails complets : {Message}", ex.ToString());
+}
+
+
 // builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 // {
 //     // Si tes migrations sont dans Infrastructure :
@@ -88,8 +109,6 @@ var conn = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 //     //opt.UseNpgsql(conn);
 // });
 
-var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-var logger = loggerFactory.CreateLogger("DB_DEBUG");
 logger.LogInformation("▶️ DB_CONNECTION_STRING utilisée : {Conn}", conn);
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
@@ -113,12 +132,26 @@ builder.Services.AddBusinessDependencies();
 var app = builder.Build();
 
 
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (!db.Database.CanConnect())
+    try
     {
-        throw new Exception("❌ Impossible de se connecter à la base de données !");
+        logger.LogInformation("🔹 Tentative de db.Database.CanConnect()...");
+        if (db.Database.CanConnect())
+        {
+            logger.LogInformation("✅ EF Core peut se connecter à la base de données !");
+        }
+        else
+        {
+            logger.LogWarning("⚠️ EF Core ne peut pas se connecter à la base de données !");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "❌ Exception EF Core lors de CanConnect() : {Message}", ex.ToString());
+        throw new Exception("❌ Impossible de se connecter à la base de données via EF Core !", ex);
     }
 }
 
