@@ -22,10 +22,10 @@ namespace Target10._9_api.Controllers
                 var result = await authenticationsService.RegisterAsync(command, cancellationToken);
                 return Ok(result);
             }
-           //  catch (InvalidOperationException ex)
-           //  {
-           //      return Conflict(new { message = "Erreur typé confli : " + ex.Message });
-           //  }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = "Erreur typé confli : " + ex.Message });
+            }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { message = "Erreur typé Mauvaise requete : " + ex.Message });
