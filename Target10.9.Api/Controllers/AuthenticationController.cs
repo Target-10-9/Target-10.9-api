@@ -11,7 +11,7 @@ namespace Target10._9_api.Controllers
         IAuthenticationsService authenticationsService
     ) : ControllerBase
     {
-        [HttpPost("register23")]
+        [HttpPost("register")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -22,13 +22,13 @@ namespace Target10._9_api.Controllers
                 var result = await authenticationsService.RegisterAsync(command, cancellationToken);
                 return Ok(result);
             }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new { message = "aller la fonctionn  faut que ça se retest ::::::" + ex.Message });
-            }
+           //  catch (InvalidOperationException ex)
+           //  {
+           //      return Conflict(new { message = "Erreur typé confli : " + ex.Message });
+           //  }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { message = "Erreur typé Mauvaise requete : " + ex.Message });
             }
         }
         
