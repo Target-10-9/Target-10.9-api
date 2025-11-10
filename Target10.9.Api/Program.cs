@@ -72,22 +72,33 @@ builder.Services.AddControllers()
 
 
 var conn = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+// builder.Services.AddDbContext<ApplicationDbContext>(opt =>
+// {
+//     // Si tes migrations sont dans Infrastructure :
+// // opt.UseNpgsql(conn, x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+// // opt.UseNpgsql(conn)
+// //     .EnableSensitiveDataLogging()
+// //     .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+//
+//     opt.UseNpgsql(conn, x =>
+//             x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+//         .EnableSensitiveDataLogging()
+//         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+//     
+//     //opt.UseNpgsql(conn);
+// });
+
+var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+var logger = loggerFactory.CreateLogger("DB_DEBUG");
+logger.LogInformation("▶️ DB_CONNECTION_STRING utilisée : {Conn}", conn);
+
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
-    // Si tes migrations sont dans Infrastructure :
-// opt.UseNpgsql(conn, x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
-// opt.UseNpgsql(conn)
-//     .EnableSensitiveDataLogging()
-//     .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-
     opt.UseNpgsql(conn, x =>
             x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
         .EnableSensitiveDataLogging()
         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-    
-    //opt.UseNpgsql(conn);
 });
-
 
 
 
