@@ -61,3 +61,16 @@ jobs:
           
           
           
+      - name: Publish new Lambda version
+        run: |
+          VERSION=$(aws lambda publish-version --function-name $LAMBDA_FUNCTION_NAME --query 'Version' --output text)
+          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Update alias to new version
+        run: |
+          aws lambda update-alias \
+            --function-name $LAMBDA_FUNCTION_NAME \
+            --name dev \
+            --function-version $NEW_VERSION
+
+          

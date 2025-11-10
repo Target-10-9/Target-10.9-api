@@ -17,10 +17,10 @@ public class ApplicationDbContext : DbContext
 {
     private readonly IDbConfiguration _config = null!;
     
-    public ApplicationDbContext(IDbConfiguration config)
-    {
-        _config = config;
-    }
+   //  public ApplicationDbContext(IDbConfiguration config)
+   //  {
+   //      _config = config;
+   //  }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -43,16 +43,16 @@ public class ApplicationDbContext : DbContext
     
     #endregion DbSets
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (_config != null)
-        {
-            optionsBuilder.UseNpgsql(_config.ConnectionString);
-        }
-
-        base.OnConfiguring(optionsBuilder);
-    }
-    
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     if (_config != null)
+    //     {
+    //         optionsBuilder.UseNpgsql(_config.ConnectionString);
+    //     }
+    //
+    //     base.OnConfiguring(optionsBuilder);
+    // }
+ 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         Assembly assembly = typeof(ApplicationDbContext).Assembly;
