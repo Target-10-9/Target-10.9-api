@@ -31,11 +31,24 @@ public static class DependencyInjection
         services.AddSingleton<IDbConfiguration, DefaultDbConfiguration>();
 
         // ← on configure explicitement le DbContext avec la chaîne et l’assembly de migrations
+        // services.AddDbContext<ApplicationDbContext>(options =>
+        //     options.UseNpgsql(
+        //         configuration.GetConnectionString("DefaultConnection"),
+        //         sql => sql.MigrationsAssembly("Target10.9.Persistence")
+        //     )
+        // );
+        
+        // On récupère la chaîne depuis ENV ou depuis la config
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+                               ?? configuration.GetConnectionString("DefaultConnection");
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"),
-                sql => sql.MigrationsAssembly("Target10.9.Persistence")
-            )
+                    connectionString,
+                    sql => sql.MigrationsAssembly("Target10.9.Persistence")
+                )
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging()
         );
 
         services.AddScoped<IUsersRepository, UsersRepository>();

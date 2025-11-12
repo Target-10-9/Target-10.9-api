@@ -113,17 +113,39 @@ catch (Exception ex)
 // });
 
 logger.LogInformation("▶️ DB_CONNECTION_STRING utilisée : {Conn}", conn);
+logger.LogInformation("🔎 Chaîne brute depuis ENV : [{Conn}]", conn ?? "NULL");
+
+var connBuilder = new NpgsqlConnectionStringBuilder(conn);
+logger.LogInformation("🧾 Host réellement pris : {Host}", connBuilder.Host);
+logger.LogInformation("🧾 Port réellement pris : {Port}", connBuilder.Port);
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
-    opt.UseNpgsql(conn, x =>
+    // opt.UseNpgsql(conn, x =>
+    //         x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+    //     .EnableSensitiveDataLogging()
+    //     .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    
+    opt.UseNpgsql(connBuilder.ConnectionString, x =>
             x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+        .EnableDetailedErrors()
         .EnableSensitiveDataLogging()
-        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Debug);
     
     opt.LogTo(Console.WriteLine, LogLevel.Debug)
         .EnableDetailedErrors()
         .EnableSensitiveDataLogging();
+    
+    opt.LogTo(
+        msg =>
+        {
+            if (msg.Contains("Opening connection"))
+                logger.LogWarning("🧭 {Msg}", msg);
+        },
+        LogLevel.Debug
+    );
+    
 });
 
 
