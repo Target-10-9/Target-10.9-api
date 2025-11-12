@@ -24,7 +24,7 @@ namespace Target10._9_api.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new { message = "Erreur typé confli : " + ex.Message });
+                return Conflict(new { message = "Erreur typé confli : " + ex.Message + ex.StackTrace });
             }
             catch (ArgumentException ex)
             {

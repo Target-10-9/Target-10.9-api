@@ -145,7 +145,8 @@ using (var scope = app.Services.CreateScope())
         }
         else
         {
-            logger.LogWarning("⚠️ EF Core ne peut pas se connecter à la base de données !");
+            
+            logger.LogWarning("⚠️ EF Core ne peut pas se connecter à la base de données ! " + db.Logs );
         }
     }
     catch (Exception ex)
