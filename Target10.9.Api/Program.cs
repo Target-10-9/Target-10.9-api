@@ -14,7 +14,10 @@ using Target10._9.Business;
 using Target10._9.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
- 
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.EnableConnectionPoolLogging", true);
+
 // Logger global pour debug
 var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 var logger = loggerFactory.CreateLogger("DB_DEBUG");
@@ -117,6 +120,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
             x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
         .EnableSensitiveDataLogging()
         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    
+    opt.LogTo(Console.WriteLine, LogLevel.Debug)
+        .EnableDetailedErrors()
+        .EnableSensitiveDataLogging();
 });
 
 
@@ -138,15 +145,23 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
-        logger.LogInformation("🔹 Tentative de db.Database.CanConnect()...");
-        if (db.Database.CanConnect())
+        try
         {
-            logger.LogInformation("✅ EF Core peut se connecter à la base de données !");
+            logger.LogInformation("🔹 Test EF Core - CanConnect()...");
+            bool canConnect = db.Database.CanConnect();
+            logger.LogInformation(canConnect
+                ? "✅ EF Core a pu se connecter à la base de données !"
+                : "⚠️ EF Core n’a PAS pu se connecter à la base !");
         }
-        else
+        catch (Exception ex)
         {
-            
-            logger.LogWarning("⚠️ EF Core ne peut pas se connecter à la base de données ! " + db.Logs );
+            logger.LogError(ex, "❌ Exception pendant CanConnect() - Détails : {Message}", ex.Message);
+            logger.LogError("🔍 StackTrace : {Stack}", ex.StackTrace);
+            if (ex.InnerException != null)
+            {
+                logger.LogError("📦 InnerException : {Inner}", ex.InnerException.Message);
+                logger.LogError("📦 Inner Stack : {Stack}", ex.InnerException.StackTrace);
+            }
         }
     }
     catch (Exception ex)
@@ -231,5 +246,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapGet("/", () => Results.Ok("Target10.9 API is running"));
+
+try
+{
+    using var connTest = new NpgsqlConnection(conn);
+    await connTest.OpenAsync();
+    var cmd = new NpgsqlCommand("SELECT 1;", connTest);
+    var result = await cmd.ExecuteScalarAsync();
+    logger.LogInformation("✅ Test SQL direct : {Result}", result);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "❌ Test SQL direct a échoué");
+}
+
+
 
 app.Run();
